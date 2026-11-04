@@ -25,7 +25,14 @@ SECRET_KEY = 'django-insecure-s6r6j_qz_b0wj!@rv(l*b2&g%uxsgjo*s%7fbjf1dr2c+w3lqr
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    '.onrender.com', 
+    'motoscrediservi.onrender.com', 
+    'coopalianza.shop', 
+    'www.coopalianza.shop', 
+    'localhost', 
+    '127.0.0.1'
+]
 
 
 # Application definition
