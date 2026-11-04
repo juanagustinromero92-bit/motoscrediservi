@@ -1,0 +1,209 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>{% block title %}Financiera CREDISERVI Motos{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body>
+
+    <header>
+        <div class="navbar">
+            <div class="logo">FINANCIERA CREDISERVI <span>MOTOS</span></div>
+            
+            <!-- Botón del Menú Hamburguesa para Móviles -->
+            <button class="menu-toggle" onclick="toggleMenu()" aria-label="Abrir Menú">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+            <ul class="nav-links" id="navLinks">
+                <li><a class="nav-item {% if request.resolver_match.url_name == 'index' %}active{% endif %}" href="{% url 'index' %}">Motos</a></li>
+                <li><a class="nav-item {% if request.resolver_match.url_name == 'financiacion' %}active{% endif %}" href="{% url 'financiacion' %}">Financiación</a></li>
+                <li><a class="nav-item {% if request.resolver_match.url_name == 'contrato' %}active{% endif %}" href="{% url 'contrato' %}">Contrato</a></li>
+                <li><a class="nav-item {% if request.resolver_match.url_name == 'ayuda' %}active{% endif %}" href="{% url 'ayuda' %}">Ayuda</a></li>
+            </ul>
+        </div>
+    </header>
+
+    {% block content %}
+    {% endblock %}
+
+    <footer>
+        <p><strong>Financiera Motos Colombia</strong> — Crédito directo y rápido</p>
+    </footer>
+
+    <!-- Botón flotante de WhatsApp -->
+    <a href="https://wa.me/573228359044?text=Hola,%20me%20gustaria%20recibir%20información%20sobre%20los%20creditos%20de%20motos" class="whatsapp-float" target="_blank" title="Contacto directo por WhatsApp">
+        💬
+    </a>
+
+    <!-- WIDGET Y VENTANA FLOTANTE DEL AGENTE VIRTUAL -->
+    <div id="chatbot-launcher" onclick="toggleChatbot()" style="position: fixed; bottom: 90px; right: 20px; z-index: 999999; display: flex; align-items: center; gap: 8px; cursor: pointer;">
+        <div style="background: #141824; border: 1px solid #00ff88; padding: 8px 14px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.6); font-size: 0.8rem; color: #ffffff; font-weight: bold; display: flex; align-items: center; gap: 6px; white-space: nowrap;">
+            <span style="width: 8px; height: 8px; background: #25d366; border-radius: 50%; display: inline-block;"></span>
+            ¿Dudas? Asesor 🤖
+        </div>
+        <div style="background: #00ff88; color: #000000; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; box-shadow: 0 0 15px rgba(0,255,136,0.5);">💬</div>
+    </div>
+
+    <!-- VENTANA POPUP / MODAL DEL CHAT -->
+    <div id="chatbot-window" style="position: fixed; bottom: 150px; right: 20px; width: 340px; max-width: calc(100vw - 40px); height: 460px; max-height: 70vh; background: #141824; border: 1px solid #232838; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.9); z-index: 1000000; display: none; flex-direction: column; overflow: hidden; box-sizing: border-box;">
+        
+        <!-- ENCABEZADO ESTILO WHATSAPP -->
+        <div style="background: #07090e; padding: 12px 16px; border-bottom: 1px solid #232838; display: flex; align-items: center; justify-content: space-between;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="width: 10px; height: 10px; background: #25d366; border-radius: 50%;"></div>
+                <div>
+                    <h4 style="color: #ffffff; font-size: 0.9rem; margin: 0; font-weight: 800; text-align: left;">Agente Crediservi</h4>
+                    <span style="color: #8f9bba; font-size: 0.7rem; display: block; text-align: left;">Asistente Virtual Financiero</span>
+                </div>
+            </div>
+            <button onclick="toggleChatbot()" style="background: transparent; border: none; color: #ffffff; font-size: 1.2rem; cursor: pointer; padding: 0 5px;">✕</button>
+        </div>
+
+        <!-- CUERPO DEL CHAT CON SCROLL INTELIGENTE -->
+        <div id="chatbotMessages" style="flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; background: #07090e; box-sizing: border-box;">
+            <!-- Contenido dinámico JS -->
+        </div>
+    </div>
+
+    <!-- SCRIPTS DE FUNCIONALIDAD -->
+    <!-- SCRIPTS DE FUNCIONALIDAD CON MAYOR RESPALDO LEGAL -->
+    <script>
+        function toggleMenu() {
+            const navLinks = document.getElementById('navLinks');
+            navLinks.classList.toggle('active');
+        }
+
+        const NUMERO_WHATSAPP = "573228359044";
+        let chatbotAbierto = false;
+
+        function toggleChatbot() {
+            const win = document.getElementById('chatbot-window');
+            chatbotAbierto = !chatbotAbierto;
+            win.style.display = chatbotAbierto ? 'flex' : 'none';
+
+            if (chatbotAbierto && document.getElementById('chatbotMessages').children.length === 0) {
+                iniciarChatbot();
+            }
+        }
+
+        function iniciarChatbot() {
+            const container = document.getElementById('chatbotMessages');
+            container.innerHTML = `
+                <div style="background: #141824; color: #ffffff; border: 1px solid #232838; border-left: 4px solid #00ff88; padding: 10px 12px; border-radius: 10px; font-size: 0.83rem; line-height: 1.4; text-align: left; box-sizing: border-box;">
+                    ¡Hola! 🏍️ Bienvenido a <strong>Crediservi S.A.S.</strong><br><br>
+                    Soy tu asistente virtual financiero. ¿En qué normatividad o proceso te puedo guiar hoy?
+                </div>
+                <button onclick="responderOpcion(1)" style="background: #07090e; border: 1px solid #00ff88; color: #00ff88; padding: 9px 12px; border-radius: 8px; font-size: 0.8rem; font-weight: bold; cursor: pointer; text-align: left; width: 100%; box-sizing: border-box; display: block; margin-top: 4px;">📋 Requisitos y cuota inicial ($500.000)</button>
+                <button onclick="responderOpcion(2)" style="background: #07090e; border: 1px solid #00ff88; color: #00ff88; padding: 9px 12px; border-radius: 8px; font-size: 0.8rem; font-weight: bold; cursor: pointer; text-align: left; width: 100%; box-sizing: border-box; display: block; margin-top: 4px;">⚖️ Validez Legal (Ley 527 y Código Civil)</button>
+                <button onclick="responderOpcion(3)" style="background: #07090e; border: 1px solid #00ff88; color: #00ff88; padding: 9px 12px; border-radius: 8px; font-size: 0.8rem; font-weight: bold; cursor: pointer; text-align: left; width: 100%; box-sizing: border-box; display: block; margin-top: 4px;">🔒 Protección de Datos (Habeas Data)</button>
+                <button onclick="responderOpcion(4)" style="background: #07090e; border: 1px solid #00ff88; color: #00ff88; padding: 9px 12px; border-radius: 8px; font-size: 0.8rem; font-weight: bold; cursor: pointer; text-align: left; width: 100%; box-sizing: border-box; display: block; margin-top: 4px;">📝 ¿Cómo firmo mi contrato digital en PDF?</button>
+                <button onclick="responderOpcion(5)" style="background: #07090e; border: 1px solid #00ff88; color: #00ff88; padding: 9px 12px; border-radius: 8px; font-size: 0.8rem; font-weight: bold; cursor: pointer; text-align: left; width: 100%; box-sizing: border-box; display: block; margin-top: 4px;">🏢 Bodegas aliadas y entregas</button>
+                <button onclick="responderOpcion(6)" style="background: #07090e; border: 1px solid #00ff88; color: #00ff88; padding: 9px 12px; border-radius: 8px; font-size: 0.8rem; font-weight: bold; cursor: pointer; text-align: left; width: 100%; box-sizing: border-box; display: block; margin-top: 4px;">📲 Hablar con un asesor en WhatsApp</button>
+            `;
+        }
+
+        function responderOpcion(opcion) {
+            if (opcion === 1) {
+                agregarMensajeUsuario("¿Requisitos y cuota inicial?");
+                setTimeout(() => {
+                    agregarMensajeBot(`
+                        📋 <strong>Requisitos del Crédito Crediservi:</strong><br>
+                        1. Cédula de ciudadanía original.<br>
+                        2. Cuota inicial mínima desde <strong>$500.000 COP</strong> (puedes aumentarla para bajar tus cuotas mensuales).<br>
+                        3. Ser mayor de edad.<br><br>
+                        Amparado bajo el Estatuto del Consumidor (Ley 1480 de 2011).
+                    `);
+                    ofrecerMenuPrincipal();
+                }, 400);
+            } 
+            else if (opcion === 2) {
+                agregarMensajeUsuario("¿Qué validez legal tienen?");
+                setTimeout(() => {
+                    agregarMensajeBot(`
+                        ⚖️ <strong>Marco Jurídico en Colombia:</strong><br>
+                        • <strong>Ley 527 de 1999:</strong> Otorga plena validez jurídica a la firma digital y los mensajes de datos.<br>
+                        • <strong>Código Civil (Art. 1861) y Código de Comercio (Art. 861)[cite: 1, 2]:</strong> Regulan los contratos de compraventa y financiación privada con garantía.<br>
+                        • <strong>Ley 1676 de 2013:</strong> Regula las garantías mobiliarias sobre vehículos.
+                    `);
+                    ofrecerMenuPrincipal();
+                }, 400);
+            }
+            else if (opcion === 3) {
+                agregarMensajeUsuario("¿Cómo protegen mis datos?");
+                setTimeout(() => {
+                    agregarMensajeBot(`
+                        🔒 <strong>Habeas Data (Ley 1581 de 2012):</strong><br>
+                        Tus datos personales y documentos subidos están protegidos bajo estrictas políticas de confidencialidad. Solo se utilizan para la validación de tu crédito vehicular en Crediservi S.A.S. (NIT: 830047118).
+                    `);
+                    ofrecerMenuPrincipal();
+                }, 400);
+            }
+            else if (opcion === 4) {
+                agregarMensajeUsuario("¿Cómo firmo el contrato digital?");
+                setTimeout(() => {
+                    agregarMensajeBot(`
+                        📝 <strong>Proceso de Firma:</strong><br>
+                        1. Ve a la sección <strong>CONTRATO</strong> en el menú superior.<br>
+                        2. Rellena o verifica tus datos y el modelo de moto elegido.<br>
+                        3. Dibuja tu firma en el recuadro interactivo.<br>
+                        4. Haz clic en aprobar para autogenerar tu contrato oficial en archivo PDF.
+                    `);
+                    ofrecerMenuPrincipal();
+                }, 400);
+            }
+            else if (opcion === 5) {
+                agregarMensajeUsuario("¿Dónde son las entregas?");
+                setTimeout(() => {
+                    agregarMensajeBot(`
+                        🏢 <strong>Logística Nacional:</strong><br>
+                        Trabajamos con una red de <strong>bodegas aliadas autorizadas</strong> en todo el país (Yamaha, Honda, Suzuki, Bajaj, AKT, TVS). Tras aprobar el contrato, se programa la entrega directa en la sede más cercana.
+                    `);
+                    ofrecerMenuPrincipal();
+                }, 400);
+            }
+            else if (opcion === 6) {
+                agregarMensajeUsuario("Quiero hablar con un asesor humano");
+                setTimeout(() => {
+                    agregarMensajeBot("Redirigiéndote a nuestro canal oficial de WhatsApp... 📲");
+                    const url = `https://wa.me/${NUMERO_WHATSAPP}?text=${encodeURIComponent('¡Hola Crediservi! Vengo desde el asistente virtual de la web y quiero asesoría detallada para mi moto.')}`;
+                    window.open(url, '_blank');
+                }, 500);
+            }
+        }
+
+        function agregarMensajeUsuario(texto) {
+            const container = document.getElementById('chatbotMessages');
+            const div = document.createElement('div');
+            div.style.cssText = "background: #00ff88; color: #000000; font-weight: bold; padding: 8px 12px; border-radius: 10px; font-size: 0.8rem; line-height: 1.4; max-width: 85%; align-self: flex-end; text-align: left; word-wrap: break-word;";
+            div.innerText = texto;
+            container.appendChild(div);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function agregarMensajeBot(htmlContent) {
+            const container = document.getElementById('chatbotMessages');
+            const div = document.createElement('div');
+            div.style.cssText = "background: #141824; color: #ffffff; border: 1px solid #232838; border-left: 4px solid #00ff88; padding: 10px 12px; border-radius: 10px; font-size: 0.83rem; line-height: 1.4; text-align: left; box-sizing: border-box; word-wrap: break-word;";
+            div.innerHTML = htmlContent;
+            container.appendChild(div);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function ofrecerMenuPrincipal() {
+            const container = document.getElementById('chatbotMessages');
+            const div = document.createElement('div');
+            div.style.marginTop = "6px";
+            div.innerHTML = `<button onclick="iniciarChatbot()" style="background: #07090e; border: 1px solid #00ff88; color: #00ff88; padding: 8px 12px; border-radius: 6px; font-size: 0.78rem; font-weight: bold; cursor: pointer; text-align: center; width: 100%; display: block;">🔄 Ver menú principal</button>`;
+            container.appendChild(div);
+            container.scrollTop = container.scrollHeight;
+        }
+    </script>
+</body>
+</html>

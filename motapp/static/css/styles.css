@@ -1,0 +1,755 @@
+/* ==========================================================================
+   VARIABLES Y COLORES SÚPER LLAMATIVOS (NEÓN & ALTO IMPACTO)
+   ========================================================================== */
+:root {
+    --primary: #00ff88;          /* Verde Neón radiante */
+    --primary-dark: #00cc6a;     
+    --accent: #ff007f;           /* Fucsia Deportivo / Magenta */
+    --accent-hover: #e0006f;
+    --bg-header: #07090e;        /* Negro espacial profundo */
+    --bg-body: #0b0f19;          /* Fondo general oscuro tecnológico */
+    --surface: #131b2e;          /* Tarjetas y contenedores oscuros elevados */
+    --text-main: #f8fafc;        /* Texto blanco puro */
+    --text-muted: #94a3b8;       /* Texto gris secundario */
+    --border: #1e293b;           /* Bordes oscuros sutiles */
+    --shadow-neon: 0 0 20px rgba(0, 255, 136, 0.25);
+    --shadow-card: 0 10px 30px rgba(0, 0, 0, 0.5);
+    --radius-lg: 20px;
+    --radius-md: 12px;
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    background-color: var(--bg-body);
+    color: var(--text-main);
+    line-height: 1.6;
+    padding-bottom: 60px;
+}
+
+/* ==========================================================================
+   HEADER & MENÚ HAMBURGUESA RESPONSIVE
+   ========================================================================== */
+header {
+    background: var(--bg-header);
+    color: white;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.5);
+    border-bottom: 2px solid var(--primary);
+}
+
+.navbar {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    position: relative;
+}
+
+.logo {
+    font-size: 1.4rem;
+    font-weight: 900;
+    letter-spacing: 0.5px;
+    color: #ffffff;
+    text-transform: uppercase;
+}
+
+.logo span {
+    color: var(--primary);
+    text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+}
+
+/* Botón Hamburguesa */
+.menu-toggle {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 22px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    z-index: 1001;
+}
+
+.menu-toggle span {
+    width: 100%;
+    height: 3px;
+    background-color: var(--primary);
+    border-radius: 2px;
+    transition: var(--transition);
+}
+
+@media(min-width: 768px) {
+    .menu-toggle { display: none; }
+}
+
+/* Enlaces de navegación */
+.nav-links {
+    list-style: none;
+    display: none; /* Oculto por defecto en móvil */
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: var(--bg-header);
+    padding: 20px;
+    box-shadow: 0 15px 25px rgba(0,0,0,0.8);
+    border-bottom: 2px solid var(--border);
+    gap: 12px;
+    text-align: center;
+}
+
+.nav-links.active {
+    display: flex; /* Se muestra al hacer clic en el menú */
+}
+
+@media(min-width: 768px) {
+    .nav-links {
+        display: flex !important;
+        flex-direction: row;
+        position: static;
+        width: auto;
+        background: transparent;
+        padding: 0;
+        box-shadow: none;
+        border: none;
+        gap: 8px;
+    }
+}
+
+.nav-links li a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.9rem;
+    padding: 10px 18px;
+    border-radius: var(--radius-md);
+    display: block;
+    transition: var(--transition);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.nav-links li a:hover,
+.nav-links li a.active {
+    background-color: var(--primary);
+    color: #000;
+    font-weight: 900;
+    box-shadow: 0 0 15px rgba(0, 255, 136, 0.4);
+}
+
+/* ==========================================================================
+   HERO BANNER & BUSCADOR
+   ========================================================================== */
+.hero-banner {
+    background: linear-gradient(135deg, rgba(7,9,14,0.95) 0%, rgba(19,27,46,0.9) 100%), 
+                url('https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?w=1400&q=80') center/cover no-repeat;
+    color: white;
+    text-align: center;
+    padding: 70px 16px;
+    border-bottom: 3px solid var(--accent);
+}
+
+.hero-banner .eyebrow {
+    color: var(--primary);
+    font-weight: 800;
+    letter-spacing: 3px;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    text-shadow: 0 0 8px rgba(0, 255, 136, 0.4);
+}
+
+.hero-banner h1 {
+    font-size: 2.3rem;
+    margin-bottom: 12px;
+    font-weight: 900;
+    text-transform: uppercase;
+    line-height: 1.1;
+}
+
+@media(min-width: 768px) {
+    .hero-banner h1 { font-size: 3rem; }
+}
+
+.hero-banner p {
+    font-size: 1.05rem;
+    max-width: 620px;
+    margin: 0 auto;
+    color: var(--text-muted);
+}
+
+.search-section {
+    background-color: var(--bg-body);
+    padding: 24px 16px 0 16px;
+    display: flex;
+    justify-content: center;
+}
+
+.search-container {
+    width: 100%;
+    max-width: 650px;
+    position: relative;
+}
+
+.search-input {
+    width: 100%;
+    padding: 15px 20px 15px 50px;
+    font-size: 0.95rem;
+    border: 2px solid var(--border);
+    border-radius: 35px;
+    outline: none;
+    transition: var(--transition);
+    background-color: var(--surface);
+    color: var(--text-main);
+    font-weight: 600;
+}
+
+.search-input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 20px rgba(0, 255, 136, 0.2);
+}
+
+.search-icon {
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.1rem;
+    color: var(--primary);
+    pointer-events: none;
+}
+
+/* ==========================================================================
+   BOTONES DE FILTRO DE MARCAS
+   ========================================================================== */
+.marcas-section {
+    background-color: var(--bg-body);
+    padding: 16px 12px 24px 12px;
+}
+
+.marcas-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+}
+
+.marca-btn {
+    background: var(--surface);
+    border: 2px solid var(--border);
+    padding: 8px 18px;
+    border-radius: 24px;
+    cursor: pointer;
+    font-weight: 800;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    transition: var(--transition);
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.marca-btn.active,
+.marca-btn:hover {
+    background: var(--primary);
+    color: #000;
+    border-color: var(--primary);
+    transform: translateY(-2px);
+    box-shadow: 0 0 15px rgba(0, 255, 136, 0.4);
+}
+
+/* ==========================================================================
+   CATÁLOGO Y TARJETAS NEÓN CON ZOOM DE MOTO
+   ========================================================================== */
+.main-container {
+    max-width: 1200px;
+    margin: 35px auto;
+    padding: 0 16px;
+}
+
+.grupo-titulo {
+    font-size: 1.3rem;
+    font-weight: 900;
+    color: var(--text-main);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin: 40px 0 18px 0;
+    padding-left: 14px;
+    border-left: 5px solid var(--primary);
+    text-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
+}
+
+.grid-motos {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 26px;
+}
+
+.card {
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    padding: 22px;
+    text-align: center;
+    box-shadow: var(--shadow-card);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border: 1px solid var(--border);
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+}
+
+.card:hover {
+    transform: translateY(-8px);
+    border-color: var(--primary);
+    box-shadow: 0 0 25px rgba(0, 255, 136, 0.2);
+}
+
+/* Línea neón superior animada */
+.card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary), var(--accent));
+    opacity: 0;
+    transition: var(--transition);
+}
+
+.card:hover::after {
+    opacity: 1;
+}
+
+.card .marca-tag {
+    font-size: 0.7rem;
+    font-weight: 800;
+    color: var(--primary);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+}
+
+.img-container {
+    background: radial-gradient(circle, #1e293b 30%, #0f172a 100%);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    margin: 14px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+    position: relative;
+    cursor: zoom-in;
+    border: 1px solid var(--border);
+    transition: var(--transition);
+}
+
+.card:hover .img-container {
+    background: radial-gradient(circle, #1e3a34 30%, #0f172a 100%);
+}
+
+/* LA MOTO CRECE Y BRILLA AL PASAR EL MOUSE */
+.card img.moto-img {
+    max-width: 100%;
+    max-height: 175px;
+    object-fit: contain;
+    filter: drop-shadow(0 10px 15px rgba(0,0,0,0.6));
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), filter 0.3s ease;
+}
+
+.card:hover img.moto-img {
+    transform: scale(1.15) translateY(-6px);
+    filter: drop-shadow(0 0 20px rgba(0, 255, 136, 0.4));
+}
+
+.zoom-badge {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background: rgba(7, 9, 14, 0.85);
+    color: var(--text-muted);
+    font-size: 0.68rem;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-weight: 700;
+    pointer-events: none;
+    transition: var(--transition);
+}
+
+.card:hover .zoom-badge {
+    color: #000;
+    background: var(--primary);
+    box-shadow: 0 0 10px var(--primary);
+}
+
+.card h3 {
+    font-size: 1.15rem;
+    color: var(--text-main);
+    margin-bottom: 6px;
+    font-weight: 800;
+}
+
+.card .precio {
+    font-size: 1.35rem;
+    font-weight: 900;
+    color: var(--primary);
+    text-shadow: 0 0 10px rgba(0, 255, 136, 0.2);
+    margin-bottom: 14px;
+}
+
+/* SELECTOR DE COLORES */
+.colores-disponibles {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 16px;
+    align-items: center;
+    flex-wrap: wrap;
+    background: var(--bg-body);
+    padding: 10px;
+    border-radius: 24px;
+    border: 1px solid var(--border);
+}
+
+.colores-disponibles span.label {
+    font-size: 0.68rem;
+    font-weight: 800;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    width: 100%;
+    margin-bottom: 4px;
+}
+
+.dot-color-wrap {
+    position: relative;
+    display: inline-flex;
+}
+
+.dot-color {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    border: 2px solid var(--surface);
+    box-shadow: 0 0 0 1px var(--text-muted);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.dot-color:hover {
+    transform: scale(1.2);
+}
+
+.dot-color.active {
+    border-color: #fff;
+    box-shadow: 0 0 12px var(--primary);
+    transform: scale(1.25);
+}
+
+/* BOTÓN DE COTIZAR DEPORTIVO (FUCSIA NEÓN) */
+.btn-cotizar {
+    background-color: var(--accent);
+    color: white;
+    border: none;
+    padding: 13px 18px;
+    font-size: 0.9rem;
+    font-weight: 900;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    width: 100%;
+    transition: var(--transition);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 20px rgba(255, 0, 127, 0.35);
+}
+
+.btn-cotizar:hover {
+    background-color: var(--accent-hover);
+    box-shadow: 0 0 25px rgba(255, 0, 127, 0.6);
+    transform: translateY(-2px);
+}
+
+/* ==========================================================================
+   SECCIONES SECUNDARIAS, MODAL Y WHATSAPP FLOTANTE
+   ========================================================================== */
+.content-box {
+    background: var(--surface);
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 35px;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+    border: 1px solid var(--border);
+    line-height: 1.7;
+}
+
+.content-box h2 {
+    color: var(--text-main);
+    margin-bottom: 16px;
+    font-size: 1.5rem;
+    border-bottom: 2px solid var(--border);
+    padding-bottom: 10px;
+}
+
+.content-box h3 { color: var(--primary); margin: 20px 0 10px 0; font-size: 1.15rem; }
+.content-box ul { margin-left: 20px; margin-bottom: 20px; }
+.content-box li { margin-bottom: 8px; }
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(7, 9, 14, 0.85);
+    backdrop-filter: blur(6px);
+    justify-content: center;
+    align-items: flex-end;
+    z-index: 99999;
+}
+
+@media(min-width: 640px) {
+    .modal { align-items: center; padding: 20px; }
+}
+
+.modal-content {
+    background: var(--surface);
+    padding: 26px;
+    border-radius: 24px 24px 0 0;
+    max-width: 500px;
+    width: 100%;
+    position: relative;
+    max-height: 90vh;
+    overflow-y: auto;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-card);
+}
+
+@media(min-width: 640px) {
+    .modal-content { border-radius: var(--radius-lg); }
+}
+
+.btn-whatsapp {
+    background-color: #25d366;
+    color: white;
+    border: none;
+    padding: 15px;
+    font-size: 1rem;
+    font-weight: 900;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.btn-whatsapp:hover {
+    background-color: #22bf5b;
+    box-shadow: 0 0 25px rgba(37, 211, 102, 0.7);
+    transform: translateY(-2px);
+}
+
+.whatsapp-float {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background-color: #25d366;
+    color: white;
+    width: 62px;
+    height: 62px;
+    border-radius: 50%;
+    text-align: center;
+    font-size: 32px;
+    box-shadow: 0 0 25px rgba(37, 211, 102, 0.5);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.whatsapp-float:hover { transform: scale(1.12) rotate(6deg); }
+
+footer {
+    background: var(--bg-header);
+    color: var(--text-muted);
+    text-align: center;
+    padding: 30px 16px;
+    font-size: 0.85rem;
+    margin-top: 60px;
+    border-top: 1px solid var(--border);
+}
+
+footer strong { color: #fff; }
+
+/* --- ESTILOS DEFINITIVOS PARA EL AGENTE VIRTUAL DE CREDISERVI --- */
+#chatbot-launcher {
+    position: fixed !important;
+    bottom: 25px !important;
+    right: 95px !important;
+    z-index: 999999 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    cursor: pointer !important;
+    background: transparent !important;
+    border: none !important;
+}
+
+.chatbot-badge {
+    background: #141824 !important;
+    border: 1px solid #00ff88 !important;
+    padding: 10px 16px !important;
+    border-radius: 20px !important;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.6) !important;
+    font-size: 0.9rem !important;
+    color: #fff !important;
+    font-weight: bold !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    white-space: nowrap !important;
+}
+
+.chatbot-pulse-dot {
+    width: 10px !important;
+    height: 10px !important;
+    background: #25d366 !important;
+    border-radius: 50% !important;
+    display: inline-block !important;
+    animation: pulseChatbot 1.5s infinite !important;
+}
+
+.chatbot-avatar-btn {
+    background: #00ff88 !important;
+    color: #000 !important;
+    width: 55px !important;
+    height: 55px !important;
+    min-width: 55px !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 1.6rem !important;
+    box-shadow: 0 0 20px rgba(0, 255, 136, 0.5) !important;
+}
+
+/* VENTANA FLOTANTE DEL CHAT */
+#chatbot-window {
+    position: fixed !important;
+    bottom: 95px !important;
+    right: 25px !important;
+    width: 360px !important;
+    max-width: 90vw !important;
+    height: 500px !important;
+    max-height: 75vh !important;
+    background: #141824 !important;
+    border: 1px solid #232838 !important;
+    border-radius: 14px !important;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.9) !important;
+    z-index: 9999999 !important;
+    display: none;
+    flex-direction: column !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+}
+
+.chatbot-header {
+    background: #07090e !important;
+    padding: 14px 16px !important;
+    border-bottom: 1px solid #232838 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+}
+
+.chatbot-body {
+    flex: 1 !important;
+    padding: 15px !important;
+    overflow-y: auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+    background: #07090e !important;
+    box-sizing: border-box !important;
+}
+
+.msg-bot {
+    background: #141824 !important;
+    color: #ffffff !important;
+    border: 1px solid #232838 !important;
+    border-left: 4px solid #00ff88 !important;
+    padding: 12px 14px !important;
+    border-radius: 10px !important;
+    font-size: 0.88rem !important;
+    line-height: 1.5 !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    word-wrap: break-word !important;
+}
+
+.msg-user {
+    background: #00ff88 !important;
+    color: #000 !important;
+    font-weight: bold !important;
+    padding: 10px 14px !important;
+    border-radius: 10px !important;
+    font-size: 0.88rem !important;
+    line-height: 1.4 !important;
+    max-width: 85% !important;
+    align-self: flex-end !important;
+    word-wrap: break-word !important;
+}
+
+.chat-btn-option {
+    background: #07090e !important;
+    border: 1px solid #00ff88 !important;
+    color: #00ff88 !important;
+    padding: 10px 14px !important;
+    border-radius: 8px !important;
+    font-size: 0.82rem !important;
+    font-weight: bold !important;
+    cursor: pointer !important;
+    text-align: left !important;
+    transition: 0.2s !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    display: block !important;
+    margin-top: 4px !important;
+}
+
+.chat-btn-option:hover {
+    background: #00ff88 !important;
+    color: #000 !important;
+}
+
+@keyframes pulseChatbot {
+    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); }
+    70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(37, 211, 102, 0); }
+    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+}

@@ -1,0 +1,309 @@
+{% extends 'motapp/base.html' %}
+{% block title %}Contrato Digital de Crédito - Crediservi{% endblock %}
+
+{% block content %}
+<!-- Librería html2pdf para generar el PDF directamente -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+<div class="content-box" style="max-width: 850px; margin: 40px auto; background: var(--surface); padding: 40px; border-radius: var(--radius-lg); border: 1px solid var(--border);">
+    
+    <div style="text-align: center; border-bottom: 2px solid var(--primary); padding-bottom: 20px; margin-bottom: 25px;">
+        <h2 style="color: var(--primary); font-size: 1.4rem; text-transform: uppercase;">CREDISERVI S.A.S.</h2>
+        <p style="font-size: 0.85rem; color: var(--text-muted);">Créditos y Servicios de Colombia | NIT: 830047118 | Matrícula Mercantil CCB</p>
+        <h3 style="color: var(--text-main); margin-top: 10px; font-size: 1.1rem;">CONTRATO DE MUTUO Y CRÉDITO VEHICULAR CON GARANTÍA PRENDARIA</h3>
+    </div>
+
+    <!-- Datos del Cliente Editables -->
+    <p style="margin-bottom: 15px; text-align: justify; color: var(--text-main); line-height: 1.6;">
+        Entre los suscritos a saber: Por una parte, <strong>CREDISERVI S.A.S.</strong> (EL ACREEDOR) y por otra parte 
+        <input type="text" id="inputNombre" placeholder="Tu Nombre Completo" style="background: var(--bg-body); border: 1px solid var(--primary); color: #fff; padding: 4px 8px; border-radius: 4px; font-weight: bold; width: 240px; display: inline-block; margin: 2px 0;">, 
+        identificado con Cédula No. 
+        <input type="number" id="inputCedula" placeholder="Tu Cédula" style="background: var(--bg-body); border: 1px solid var(--primary); color: #fff; padding: 4px 8px; border-radius: 4px; font-weight: bold; width: 140px; display: inline-block; margin: 2px 0;">, 
+        quien en adelante se denominará EL DEUDOR, celebramos el presente contrato de mutuo y financiación comercial.
+    </p>
+
+    <h3 style="color: var(--primary); font-size: 1rem; margin-top: 20px;">CLÁUSULA PRIMERA: OBJETO Y CONDICIONES FINANCIERAS</h3>
+    
+    <ul style="background: var(--bg-body); padding: 20px; border-radius: var(--radius-md); list-style: none; color: var(--text-muted);">
+        <!-- Selector completo con todas las marcas y modelos o escritura libre -->
+        <li style="margin-bottom: 12px;">
+            🏍️ <strong>Seleccionar Moto del Catálogo o Escribir Modelo:</strong><br>
+            <select id="selectCatalogoMoto" onchange="seleccionarMotoDeLista()" style="width: 100%; max-width: 450px; padding: 8px; background: var(--surface); color: #fff; border: 1px solid var(--border); border-radius: 4px; margin-bottom: 6px; outline: none;">
+                <option value="">-- Elige cualquier moto del catálogo o escribe abajo --</option>
+            </select>
+            <input type="text" id="inputMoto" placeholder="Ej: Bajaj Pulsar N160 (Editable libremente)" style="width: 100%; max-width: 450px; padding: 8px 12px; background: var(--surface); border: 1px solid var(--primary); color: #fff; font-weight: bold; border-radius: 4px; outline: none;">
+        </li>
+
+        <!-- Valor Comercial de la Moto -->
+        <li style="margin-bottom: 12px;">
+            💰 <strong>Valor Comercial de la Moto:</strong><br>
+            <input type="number" id="inputPrecio" value="11199000" step="50000" oninput="calcularFinanciacion()" style="width: 100%; max-width: 250px; padding: 8px 12px; background: var(--surface); border: 1px solid var(--border); color: #fff; font-weight: bold; border-radius: 4px; margin-top: 4px; outline: none;">
+        </li>
+
+        <!-- Cuota Inicial Abonada (Mínimo $500.000 COP) -->
+        <li style="margin-bottom: 12px;">
+            💵 <strong>Cuota Inicial Abonada (Mín. $500.000 COP):</strong><br>
+            <input type="number" id="inputCuota" value="500000" min="500000" step="50000" oninput="calcularFinanciacion()" style="width: 100%; max-width: 250px; padding: 8px 12px; background: var(--surface); border: 1px solid var(--accent); color: var(--accent); font-weight: bold; border-radius: 4px; margin-top: 4px; outline: none;">
+        </li>
+
+        <!-- Resumen del Saldo Neto Financiado -->
+        <li style="border-top: 1px dashed var(--border); padding-top: 10px; margin-top: 10px;">
+            💳 <strong>Monto Neto a Financiar:</strong> 
+            <span id="lblFinanciado" style="color: var(--primary); font-size: 1.1rem; font-weight: 900;">$0 COP</span>
+        </li>
+    </ul>
+
+    <h3 style="color: var(--primary); font-size: 1rem; margin-top: 20px;">CLÁUSULA SEGUNDA: MARCO LEGAL Y RESPALDO EN COLOMBIA</h3>
+    <p style="font-size: 0.85rem; color: var(--text-muted); text-align: justify; line-height: 1.6;">
+        El presente contrato y su respectiva financiación se regulan e interpretan de conformidad con la legislación de la República de Colombia, amparándose en: 
+        (i) El <strong>Artículo 1861 y la Ley 84 de 1873 del Código Civil</strong> relativos a las arras y la vinculación contractual perfecta[cite: 1, 2]; 
+        (ii) El <strong>Artículo 861 del Código de Comercio</strong> sobre la promesa de negocio jurídico y efectos de cumplimiento[cite: 1, 2]; 
+        (iii) La <strong>Ley 1480 de 2011 (Estatuto del Consumidor)</strong>, garantizando información veraz y protección de los derechos crediticios[cite: 1, 2]; y 
+        (iv) La <strong>Ley 1676 de 2013 de Garantías Mobiliarias</strong>, constituyendo prenda sin tenencia sobre el vehículo automotor descrito como garantía real del pago total de la obligación[cite: 1, 2].
+    </p>
+
+    <!-- SECCIÓN DE FIRMA DIGITAL -->
+    <h3 style="color: var(--primary); font-size: 1rem; margin-top: 25px;">FIRMA DIGITAL DEL DEUDOR</h3>
+    <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 10px;">Firme dentro del recuadro usando su dedo (desde celular) o el cursor del mouse (desde PC):</p>
+    
+    <div style="background: #ffffff; border-radius: 8px; overflow: hidden; display: inline-block; border: 2px dashed var(--primary); position: relative;">
+        <canvas id="canvasFirma" width="320" height="150" style="touch-action: none; cursor: crosshair; display: block;"></canvas>
+    </div>
+    <div style="margin-top: 8px;">
+        <button type="button" onclick="limpiarFirma()" style="background: var(--border); color: #fff; border: none; padding: 6px 14px; border-radius: 6px; font-size: 0.75rem; cursor: pointer; font-weight: bold;">Borrar Firma</button>
+    </div>
+
+    <div style="margin-top: 30px; text-align: center;">
+        <button onclick="firmarYAprobarContrato()" class="btn-cotizar" style="max-width: 350px; display: inline-block; background: var(--primary); color: #000; font-weight: 900; padding: 14px; border-radius: 8px; cursor: pointer;">📄 DESCARGAR PDF Y ENVIAR A WHATSAPP</button>
+    </div>
+</div>
+
+<script>
+    const NUMERO_TELEFONO = "57573228359044";
+
+    // Catálogo completo con TODAS las referencias de tu inventario
+    const catalogoCompletoMotos = [
+        // Bajaj Boxer
+        { name: 'Bajaj Boxer CT100 KS', price: 5899000 },
+        { name: 'Bajaj Boxer CT100 ES Boxer Racing', price: 6399000 },
+        { name: 'Bajaj Boxer CT100 KS Racing', price: 5999000 },
+        { name: 'Bajaj Boxer CT100 ES', price: 6199000 },
+        { name: 'Bajaj Boxer CT125 Sport', price: 6899000 },
+        { name: 'Bajaj Boxer 150X', price: 7499000 },
+        // Bajaj Pulsar
+        { name: 'Bajaj Pulsar N125 Carburada', price: 7599000 },
+        { name: 'Bajaj Pulsar N125 FI', price: 8099000 },
+        { name: 'Bajaj Pulsar N160 Pro', price: 10999000 },
+        { name: 'Bajaj Pulsar NS 125', price: 8799000 },
+        { name: 'Bajaj Pulsar NS 160 Fi ABS', price: 11199000 },
+        { name: 'Bajaj Pulsar NS200 FI ABS DC', price: 15799000 },
+        { name: 'Bajaj Pulsar NS200 FI ABS SC', price: 13199000 },
+        { name: 'Bajaj Pulsar NS400Z', price: 18299000 },
+        { name: 'Bajaj Pulsar P150', price: 8999000 },
+        { name: 'Bajaj Pulsar RS 200 FI ABS', price: 15999000 },
+        // Bajaj Discover
+        { name: 'Bajaj Discover 125 SPORT', price: 6999000 },
+        // Bajaj Dominar
+        { name: 'Bajaj Dominar 250', price: 15799900 },
+        { name: 'Bajaj Dominar 400 Touring', price: 19399000 },
+        { name: 'Bajaj Dominar 400 Volcano', price: 20399000 },
+        // AKT
+        { name: 'AKT NKD 125 FP', price: 5890000 },
+        { name: 'AKT NKD 125', price: 4890000 },
+        { name: 'AKT NKD 125 Classic', price: 5490000 },
+        { name: 'AKT CHR 125', price: 5490000 },
+        { name: 'AKT CR4 150', price: 6999000 },
+        { name: 'AKT 250 R', price: 11590000 },
+        { name: 'AKT CR4 125', price: 6590000 },
+        { name: 'AKT CR4 200 Pro', price: 8590000 },
+        { name: 'AKT TTR 125', price: 7390000 },
+        { name: 'AKT TTR 200', price: 9190000 },
+        { name: 'AKT TTR 125 VERDE MILITAR', price: 7800000 },
+        { name: 'AKT TTR 200 ABS VERDE MILITAR', price: 9390000 },
+        { name: 'AKT TT200 Rally', price: 10590000 },
+        { name: 'AKT RALLY 300', price: 17590000 },
+        { name: 'AKT DS 300', price: 15590000 },
+        { name: 'AKT TT200 con ABS', price: 9790000 },
+        { name: 'AKT XRS 180', price: 13990000 },
+        { name: 'AKT Dynamic RX Fi', price: 9490000 },
+        { name: 'AKT Dynamic Pro CBS', price: 8090000 },
+        { name: 'AKT Jet Evo', price: 12590000 },
+        { name: 'AKT Special 110 X', price: 4999000 },
+        { name: 'AKT Flex 125', price: 5890000 },
+        // Auteco TVS & Apache
+        { name: 'AUTECO TVS RAIDER 125', price: 7299000 },
+        { name: 'AUTECO TVS RAIDER 125 RACING', price: 7549000 },
+        { name: 'AUTECO TVS RAIDER 125 FI', price: 7549000 },
+        { name: 'AUTECO TVS APACHE 160 CARBURADA ABS', price: 9299000 },
+        { name: 'AUTECO TVS APACHE RTR 160 4V XC FI', price: 9999999 },
+        { name: 'AUTECO TVS APACHE RTR 160 4V XC FI RACING', price: 10299000 },
+        { name: 'AUTECO TVS APACHE 160 FI NG', price: 11499999 },
+        { name: 'AUTECO TVS APACHE 160 FI ABS EDICIÓN ESPECIAL', price: 10649000 },
+        { name: 'AUTECO TVS APACHE 200 CARBURADA ABS', price: 11799000 },
+        { name: 'AUTECO TVS APACHE RTR 200 4V XC FI ABS', price: 12599000 },
+        { name: 'AUTECO TVS APACHE 200 FI EDICIÓN ESPECIAL', price: 12899000 },
+        { name: 'AUTECO TVS RONIN 225 TD', price: 13999000 },
+        { name: 'AUTECO TVS Apache 200 FI NG', price: 14999000 },
+        { name: 'AUTECO TVS APACHE RTR 310', price: 27799000 },
+        { name: 'AUTECO TVS APACHE RTR 310 PRM', price: 29499000 },
+        // Yamaha
+        { name: 'YAMAHA XTZ150', price: 14500000 },
+        { name: 'YAMAHA XTZ250', price: 25900000 },
+        { name: 'YAMAHA FZ VERSIÓN 3.0', price: 11800000 },
+        { name: 'YAMAHA FZ-S FI VERSION 3.0', price: 12300000 },
+        { name: 'YAMAHA FZ-S FI VERSION 4.0', price: 13500000 },
+        { name: 'YAMAHA FZ 25', price: 16500000 },
+        { name: 'YAMAHA MT-03', price: 28900000 },
+        { name: 'YAMAHA NMAX CONNECTED', price: 16800000 },
+        { name: 'YAMAHA NMAX TECH MAX', price: 18500000 },
+        { name: 'YAMAHA XMAX', price: 32900000 },
+        { name: 'YAMAHA DT 125', price: 12900000 },
+        { name: 'YAMAHA DT 175', price: 14900000 },
+        // Honda
+        { name: 'HONDA CB 125F', price: 6299000 },
+        { name: 'HONDA CB 190R', price: 11999000 },
+        { name: 'HONDA XR 150L', price: 10500000 },
+        { name: 'HONDA XR 190L', price: 13500000 },
+        { name: 'HONDA NAVI', price: 5599000 },
+        { name: 'HONDA DIO', price: 8299000 },
+        // Suzuki
+        { name: 'SUZUKI GSX-R150 ABS', price: 14590000 }
+    ];
+
+    window.onload = function() {
+        // Poblar el selector con todas las motos del inventario
+        const selectEl = document.getElementById('selectCatalogoMoto');
+        catalogoCompletoMotos.forEach(m => {
+            const opt = document.createElement('option');
+            opt.value = m.name;
+            opt.innerText = `${m.name} ($${m.price.toLocaleString('es-CO')} COP)`;
+            selectEl.appendChild(opt);
+        });
+
+        // Cargar datos guardados si el usuario viene del catálogo
+        const guardado = localStorage.getItem('creditoActivo');
+        if(guardado) {
+            try {
+                const parsed = JSON.parse(guardado);
+                if(parsed.moto) {
+                    document.getElementById('inputMoto').value = parsed.moto;
+                    selectEl.value = parsed.moto;
+                }
+                if(parsed.precio) document.getElementById('inputPrecio').value = parsed.precio;
+                if(parsed.cuota) document.getElementById('inputCuota').value = parsed.cuota;
+                if(parsed.nombre) document.getElementById('inputNombre').value = parsed.nombre;
+                if(parsed.cedula) document.getElementById('inputCedula').value = parsed.cedula;
+            } catch(e) {
+                console.error("Error cargando datos locales", e);
+            }
+        }
+        calcularFinanciacion();
+    };
+
+    function seleccionarMotoDeLista() {
+        const selectEl = document.getElementById('selectCatalogoMoto');
+        const motoEncontrada = catalogoCompletoMotos.find(m => m.name === selectEl.value);
+        if(motoEncontrada) {
+            document.getElementById('inputMoto').value = motoEncontrada.name;
+            document.getElementById('inputPrecio').value = motoEncontrada.price;
+            calcularFinanciacion();
+        }
+    }
+
+    function calcularFinanciacion() {
+        let precio = parseFloat(document.getElementById('inputPrecio').value) || 0;
+        let cuota = parseFloat(document.getElementById('inputCuota').value) || 0;
+
+        let cuotaEfectiva = cuota;
+        if(cuotaEfectiva < 500000 && cuota !== 0) {
+            cuotaEfectiva = 500000;
+        }
+
+        let financiado = precio - cuotaEfectiva;
+        if(financiado < 0) financiado = 0;
+
+        document.getElementById('lblFinanciado').innerText = "$" + Math.round(financiado).toLocaleString('es-CO') + " COP";
+    }
+
+    // Configuración del Canvas para la Firma Digital
+    const canvas = document.getElementById('canvasFirma');
+    const ctx = canvas.getContext('2d');
+    let dibujando = false;
+    let haFirmado = false;
+
+    function obtenerPosicion(e) {
+        const rect = canvas.getBoundingClientRect();
+        const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+        const clientY = e.clientY || (e.touches && e.touches[0].clientY);
+        return { x: clientX - rect.left, y: clientY - rect.top };
+    }
+
+    canvas.addEventListener('mousedown', (e) => { dibujando = true; haFirmado = true; ctx.beginPath(); const pos = obtenerPosicion(e); ctx.moveTo(pos.x, pos.y); });
+    canvas.addEventListener('mousemove', (e) => { if (!dibujando) return; const pos = obtenerPosicion(e); ctx.lineTo(pos.x, pos.y); ctx.stroke(); });
+    canvas.addEventListener('mouseup', () => { dibujando = false; });
+    
+    canvas.addEventListener('touchstart', (e) => { dibujando = true; haFirmado = true; ctx.beginPath(); const pos = obtenerPosicion(e); ctx.moveTo(pos.x, pos.y); e.preventDefault(); });
+    canvas.addEventListener('touchmove', (e) => { if (!dibujando) return; const pos = obtenerPosicion(e); ctx.lineTo(pos.x, pos.y); ctx.stroke(); e.preventDefault(); });
+    canvas.addEventListener('touchend', () => { dibujando = false; });
+
+    function limpiarFirma() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        haFirmado = false;
+    }
+
+    function firmarYAprobarContrato() {
+        const nombre = document.getElementById('inputNombre').value.trim();
+        const cedula = document.getElementById('inputCedula').value.trim();
+        const moto = document.getElementById('inputMoto').value.trim();
+        let precio = parseFloat(document.getElementById('inputPrecio').value) || 0;
+        let cuota = parseFloat(document.getElementById('inputCuota').value) || 500000;
+
+        if(!nombre || !cedula) {
+            alert("Por favor completa tu Nombre y Cédula.");
+            return;
+        }
+
+        if(!moto) {
+            alert("Por favor indica la Marca y Modelo de la moto.");
+            return;
+        }
+
+        if(cuota < 500000) {
+            cuota = 500000;
+            document.getElementById('inputCuota').value = 500000;
+        }
+
+        if(!haFirmado) {
+            alert("Por favor dibuja tu firma dentro del recuadro antes de continuar.");
+            return;
+        }
+
+        const financiado = precio - cuota;
+        const elementoAConvertir = document.querySelector('.content-box');
+        
+        // Opciones para generar el PDF automáticamente
+        const opcionesPDF = {
+            margin:       10,
+            filename:     `Contrato_${nombre.replace(/\s+/g, '_')}_${cedula}.pdf`,
+            image:        { type: 'jpeg', quality: 0.98 },
+            html2canvas:  { scale: 2 },
+            jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        };
+
+        // Generar descarga del PDF y abrir WhatsApp para enviarlo
+        html2pdf().set(opcionesPDF).from(elementoAConvertir).save().then(() => {
+            const mensaje = `📝 *CONTRATO GENERADO Y FIRMADO EN PDF*%0A%0A` +
+                            `👤 *Cliente:* ${nombre}%0A` +
+                            `🪪 *Cédula:* ${cedula}%0A` +
+                            `🏍️ *Moto:* ${moto}%0A` +
+                            `💰 *Valor Comercial:* $${Math.round(precio).toLocaleString('es-CO')} COP%0A` +
+                            `💵 *Cuota Inicial:* $${Math.round(cuota).toLocaleString('es-CO')} COP%0A` +
+                            `💳 *Monto Financiado:* $${Math.round(financiado).toLocaleString('es-CO')} COP%0A%0A` +
+                            `📎 _Adjunto el archivo PDF descargado con mi firma digital._`;
+
+            const urlWhatsApp = `https://wa.me/${NUMERO_TELEFONO}?text=${mensaje}`;
+            window.open(urlWhatsApp, '_blank');
+        });
+    }
+</script>
+{% endblock %}

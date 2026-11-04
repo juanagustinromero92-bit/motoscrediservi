@@ -1,0 +1,883 @@
+{% extends 'motapp/base.html' %}
+
+{% block title %}Catálogo de Motos - Crediservi{% endblock %}
+
+{% block content %}
+<section id="inicio" class="page-section active">
+    <div class="hero-banner">
+        <div class="eyebrow">Crédito directo en Colombia</div>
+        <h1>Tu moto fácil y rápida</h1>
+        <p>🏍️ Haz realidad el sueño de estrenar tu moto con financiación fácil, rápida y segura.</p>
+    </div>
+
+    <!-- BANNER DE CONFIANZA RÁPIDA EN EL CATÁLOGO -->
+<div style="max-width: 1200px; margin: 20px auto; padding: 0 15px;">
+    <div style="background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <span style="font-size: 1.8rem;">🛡️</span>
+            <div>
+                <h4 style="color: #fff; font-size: 0.95rem; margin: 0; font-weight: 800;">Financiación 100% Segura y Respaldada</h4>
+                <p style="color: var(--text-muted); font-size: 0.8rem; margin: 2px 0 0 0;">Amparados bajo la Ley de Garantías Mobiliarias y Estatuto del Consumidor.</p>
+            </div>
+        </div>
+        <a href="/ayuda/" style="background: rgba(0, 255, 136, 0.1); color: var(--primary); border: 1px solid var(--primary); padding: 8px 16px; border-radius: 6px; font-size: 0.8rem; font-weight: 800; text-decoration: none; text-transform: uppercase; transition: 0.2s;">Conoce nuestro respaldo →</a>
+    </div>
+</div>
+
+    <!-- BARRA DE BÚSQUEDA -->
+    <div class="search-section">
+        <div class="search-container">
+            <span class="search-icon">🔍</span>
+            <input 
+                type="text" 
+                id="searchInput" 
+                class="search-input" 
+                placeholder="Escribe la marca o modelo (ej. Yamaha, FZ, Pulsar)..." 
+                onkeyup="buscarMoto()"
+            >
+        </div>
+    </div>
+
+    <div class="marcas-section">
+        <div class="marcas-container">
+            <button class="marca-btn active" onclick="filtrarMarca('todas', this)">Todas</button>
+            <button class="marca-btn" onclick="filtrarMarca('BAJAJ BOXER', this)">Bajaj Boxer</button>
+            <button class="marca-btn" onclick="filtrarMarca('BAJAJ PULSAR', this)">BAJAJ PULSAR</button>
+            <button class="marca-btn" onclick="filtrarMarca('BAJAJ DISCOVER', this)">BAJAJ DISCOVER</button>
+            <button class="marca-btn" onclick="filtrarMarca('BAJAJ DOMINAR', this)">BAJAJ DOMINAR</button>
+            <button class="marca-btn" onclick="filtrarMarca('AKT', this)">AKT</button>
+            <button class="marca-btn" onclick="filtrarMarca('AUTECO TVS Y APACHE', this)">AUTECO TVS Y APACHE </button>
+            <button class="marca-btn" onclick="filtrarMarca('YAMAHA', this)">YAMAHA</button>
+            <button class="marca-btn" onclick="filtrarMarca('HONDA', this)">HONDA</button>
+            <button class="marca-btn" onclick="filtrarMarca('SUZUKI', this)">SUZUKI</button>
+        </div>
+    </div>
+
+    <div class="main-container" id="mainContainer"></div>
+</section>
+
+<!-- MODAL DE COTIZACIÓN -->
+ 
+<div class="modal" id="modalCotizacion">
+    <div class="modal-content">
+        <div class="modal-header-nav" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+            <button class="btn-atras" onclick="cerrarModal()" style="background: transparent; border: none; color: var(--primary); font-weight: 700; cursor: pointer; font-size: 0.9rem;">⬅️ Regresar al catálogo</button>
+            <span class="close-btn" onclick="cerrarModal()" style="font-size: 1.5rem; color: var(--text-muted); cursor: pointer; font-weight: bold;">&times;</span>
+        </div>
+
+        <h2 id="modalTitulo" style="color: var(--text-main); margin-bottom: 4px; font-size: 1.3rem; font-weight: 900; text-transform: uppercase;">Solicitar Crédito</h2>
+        <p id="modalPrecioTexto" style="color: var(--primary); font-size: 0.9rem; margin-bottom: 16px; font-weight: 800;"></p>
+
+        <form id="formCotizacion" onsubmit="enviarWhatsApp(event)">
+            <div class="form-group" style="margin-bottom: 14px;">
+                <label style="display: block; font-size: 0.8rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px;">Tu Nombre Completo:</label>
+                <input type="text" id="nombre" placeholder="Ej: Juan Pérez" required style="width: 100%; padding: 12px 16px; background: var(--bg-body); border: 1px solid var(--border); border-radius: var(--radius-md); color: var(--text-main); font-size: 0.95rem; outline: none;">
+            </div>
+            
+            <div class="form-group" style="margin-bottom: 14px;">
+                <label style="display: block; font-size: 0.8rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px;">Tu Cédula (C.C.):</label>
+                <input type="number" id="cedula" placeholder="Ej: 1020304050" required style="width: 100%; padding: 12px 16px; background: var(--bg-body); border: 1px solid var(--border); border-radius: var(--radius-md); color: var(--text-main); font-size: 0.95rem; outline: none;">
+            </div>
+            
+            <div class="form-group" style="margin-bottom: 14px;">
+                <label style="display: block; font-size: 0.8rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px;">Color Elegido:</label>
+                <select id="colorMoto" required style="width: 100%; padding: 12px 16px; background: var(--bg-body); border: 1px solid var(--border); border-radius: var(--radius-md); color: var(--text-main); font-size: 0.95rem; outline: none;"></select>
+            </div>
+
+            <!-- Cuota Inicial Mínima de 500.000 y totalmente editable -->
+            <div class="form-group" style="margin-bottom: 14px;">
+                <label style="display: block; font-size: 0.8rem; font-weight: 700; color: var(--primary); text-transform: uppercase; margin-bottom: 6px;">Cuota Inicial (Mín. $500.000 COP):</label>
+                <input type="number" id="montoCuota" value="500000" min="500000" step="50000" oninput="calcularCredito()" required style="width: 100%; padding: 12px 16px; background: var(--bg-body); border: 1px solid var(--primary); border-radius: var(--radius-md); color: var(--text-main); font-size: 0.95rem; outline: none; font-weight: bold;">
+                <small style="color: var(--text-muted); font-size: 0.75rem; margin-top: 4px; display: block;">Puedes dejar el mínimo de 500 mil o digitar un valor superior.</small>
+            </div>
+            
+            <div class="form-group" style="margin-bottom: 18px;">
+                <label style="display: block; font-size: 0.8rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px;">Plazo a Pagar:</label>
+                <select id="plazoMeses" onchange="calcularCredito()" style="width: 100%; padding: 12px 16px; background: var(--bg-body); border: 1px solid var(--border); border-radius: var(--radius-md); color: var(--text-main); font-size: 0.95rem; outline: none;">
+                    <option value="12">12 Meses</option>
+                    <option value="24">24 Meses</option>
+                    <option value="36" selected>36 Meses</option>
+                    <option value="48">48 Meses</option>
+                    <option value="60">60 Meses</option>
+                </select>
+            </div>
+
+            <!-- Resumen de crédito dinámico -->
+            <div class="resumen-credito" style="background: var(--bg-body); padding: 14px; border-radius: var(--radius-md); border: 1px solid var(--border); margin-bottom: 20px; font-size: 0.9rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 6px;"><span style="color: var(--text-muted);">Valor Moto:</span><span id="resValorMoto" style="font-weight: bold;">$0</span></div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 6px;"><span style="color: var(--text-muted);">Cuota Inicial Abonada:</span><span id="resCuotaInicial" style="font-weight: bold; color: var(--accent);">$0</span></div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 8px;"><span style="color: var(--text-muted);">Monto a Financiar:</span><span id="resMontoFinanciar" style="font-weight: bold;">$0</span></div>
+                <div class="total-cuota" style="display: flex; justify-content: space-between; border-top: 1px dashed var(--border); padding-top: 8px; font-weight: 900;"><span style="color: var(--primary);">Cuota Mensual:</span><span id="resCuotaMensual" style="color: var(--primary); font-size: 1.1rem;">$0</span></div>
+            </div>
+
+            <button type="submit" class="btn-whatsapp">📲 ENVIAR SOLICITUD A WHATSAPP</button>
+        </form>
+    </div>
+</div>
+
+<div class="lightbox" id="lightbox" onclick="cerrarLightbox()" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(7,9,14,0.9); z-index:999999; justify-content:center; align-items:center; flex-direction:column; padding:20px;">
+    <img id="lightboxImg" src="" alt="Moto Zoom" style="max-width:90%; max-height:80vh; object-fit:contain; border-radius:12px; box-shadow:0 0 30px rgba(0,255,136,0.3);">
+    <button class="cerrar-lb" style="margin-top:20px; background:var(--accent); color:white; border:none; padding:10px 24px; border-radius:20px; font-weight:bold; cursor:pointer; text-transform:uppercase;">Cerrar vista ampliada</button>
+</div>
+
+<script>
+const NUMERO_TELEFONO = "573213198198";
+const TASA_INTERES = 0.005;
+
+const catalogo = [
+    { grupo:'BAJAJ BOXER', brand:'BAJAJ BOXER', motos:[
+        { id:'Bajaj Boxer CT100 KS', name:'Bajaj Boxer CT100 KS', price:5899000, 
+          colors:[
+          {name:'Negro', hex:'#000000', img:'/media/motos/boxerct100negra.png'},
+          {name:'Rojo', hex: '#dc2626', img: '/media/motos/boxerct100roja.png' },
+          {name:'Azul', hex:'#1d4ed8', img:'/media/motos/boxerct100azul.png'},
+          {name:'Gris', hex:'#64748b', img:'/media/motos/boxerct100gris.png'},
+          {name:'Amarillo', hex:'#eab308', img:'/media/motos/boxerct100amarillo.png'}
+          ] 
+        },
+        { id:'Bajaj Boxer CT100 ES Boxer Racing', name:'Bajaj Boxer CT100 ES Boxer Racing', price:6399000, 
+          colors:[
+          {name:'Negro/Rojo', hex:'#000000', img:'/media/motos/Boxer CT100 ES Boxer Racingnegrorojo.png'},
+          {name:'Gris', hex:'#64748b', img:'/media/motos/Boxer CT100 ES Boxer Racingnegrogris.png'}
+          ] 
+        },
+        { id:'Bajaj Boxer CT100 KS Racing', name:'Bajaj Boxer CT100 KS Racing', price:5999000, 
+          colors:[
+          {name:'Negro/Rojo', hex:'#000000', img:'/media/motos/Boxer CT100 KS Boxer Raciningnegra-rojo.png'},
+          {name:'Gris', hex:'#64748b', img:'/media/motos/CT100-KS-Boxer-Racining-gris.png'}
+          ] 
+        },
+        { id:'Bajaj Boxer CT100 ES', name:'Bajaj Boxer CT100 ES', price:6199000, 
+          colors:[
+          {name:'Negro', hex:'#000000', img:'/media/motos/Boxer-CT100-ESnegro.png'},
+          {name:'Rojo', hex: '#dc2626', img: '/media/motos/Boxer-CT100-ESroja.png' },
+          {name:'Azul', hex: '#1d4ed8', img: '/media/motos/Boxer-CT100-ESazul.png' },
+          {name:'Morado', hex: '#581c87', img: '/media/motos/boxerct100morado.png' }
+          ] 
+        },
+        { id:'Bajaj Boxer CT125 Sport', name:'Bajaj Boxer CT125 Sport', price:6899000, 
+          colors:[
+          {name:'Gris', hex:'#64748b', img:'/media/motos/Boxer CT125 Sportgris.png'},    
+          {name:'Negro', hex:'#000000', img:'/media/motos/Boxer CT125 Sportnegro.png'},
+          {name:'Rojo', hex: '#dc2626', img: '/media/motos/Boxer CT125 Sportrojo.png' },
+          {name:'Azul', hex:'#1d4ed8', img:'/media/motos/Boxer CT125 Sportazul.png'}
+          ] 
+        },
+        { id:'Bajaj Boxer 150X', name:'Bajaj Boxer 150X', price:7499000, 
+          colors:[  
+          {name:'Negro', hex:'#000000', img:'/media/motos/Boxer 150Xnegro.png'},
+          {name:'Verde', hex:'#15803d', img: '/media/motos/Boxer 150Xamarillo.png' },
+          {name:'Azul', hex:'#1d4ed8', img:'/media/motos/Boxer 150Xazul.png'}
+          ] 
+        },
+    ]},
+
+    { grupo:'BAJAJ PULSAR', brand:'BAJAJ PULSAR', motos:[
+        { id:'Bajaj Pulsar N125 Carburada', name:'Bajaj Pulsar N125 Carburada', price:7599000, 
+          colors:[
+          {name:'Morado', hex: '#581c87', img:'/media/motos/Pulsar N125 Carburadamorda.png'},    
+          {name:'Verde', hex:'#15803d', img:'/media/motos/Pulsar N125 Carburadaverde.png'},
+          {name:'Rojo', hex: '#dc2626', img: '/media/motos/Pulsar N125 Carburadaroja.png' }
+          ]
+        },
+        { id:'Bajaj Pulsar N125 FI', name:'Bajaj Pulsar N125 FI', price:8099000, 
+          colors:[
+          {name:'Gris', hex:'#64748b', img:'/media/motos/Pulsar N125 FIgris.png'},
+          {name:'Morado', hex: '#581c87', img:'/media/motos/Pulsar N125 FImorado.png'},    
+          {name:'Verde', hex:'#15803d', img:'/media/motos/Pulsar N125 FIverde.png'},
+          {name:'Rojo', hex: '#dc2626', img: '/media/motos/Pulsar N125 FIrojo.png' }
+          ]
+        },
+        { id:'Bajaj Pulsar N160 Pro', name:'Bajaj Pulsar N160 Pro', price:10999000, 
+          colors:[
+          {name:'Negro', hex:'#000000', img:'/media/motos/Pulsar N160 Pronegro.png'},   
+          {name:'Azul Petroleo', hex:'#0f4c81', img:'/media/motos/Pulsar N160 Proazulpetroleo.png'},     
+          {name:'Morado', hex: '#581c87', img:'/media/motos/Pulsar N125 Carburadamorda.png'},  
+          {name:'Gris', hex:'#64748b', img:'/media/motos/Pulsar N160 Progris.png'},
+          {name:'Negro Cristal', hex:'#111827', img:'/media/motos/Pulsar N160 Pronegrocristal.png'}
+          ]
+        },
+        { id:'Bajaj Pulsar NS 125', name:'Bajaj Pulsar NS 125', price:8799000, 
+          colors:[
+          {name:'Negro Cristal', hex:'#111827', img:'/media/motos/Pulsar NS 125negra.png'},    
+          {name:'Verde', hex:'#15803d', img:'/media/motos/Pulsar NS 125rojo.png'},
+          {name:'Azul', hex:'#1d4ed8', img:'/media/motos/Pulsar NS 125azul.png'}, 
+          ]
+        },
+        { id:'Bajaj Pulsar NS 160 Fi ABS', name:'Bajaj Pulsar NS 160 Fi ABS', price:11199000, 
+          colors:[
+          {name:'Rojo Merlot', hex: '#800020', img: '/media/motos/Pulsar NS 160 Fi ABSrojomerlot.png' },
+          {name:'Gris Onix', hex:'#334155', img:'/media/motos/Pulsar NS 160 Fi ABSGris Onix.png'},
+          {name:'Negro Zafiro', hex:'#0f172a', img: '/media/motos/Pulsar NS 160 Fi ABSnegrozafiro.png' },
+          {name:'Negro Cristal',hex:'#000000', img:'/media/motos/Pulsar NS 160 Fi ABSnegrocristal.png'}
+          ]
+        },
+        { id:'Bajaj Pulsar NS200 FI ABS DC', name:'Bajaj Pulsar NS200 FI ABS DC', price:15799000, 
+          colors:[
+          {name:'Mercury Blue', hex: '#0284c7', img: '/media/motos/Pulsar NS200 FI ABS DCMercury Bluet.png'},
+          {name:'Rojo Merlot', hex: '#800020', img: '/media/motos/Pulsar NS200 FI ABS DCRojo Merlot.png' },
+          {name:'Gris Onix', hex:'#334155', img:'/media/motos/Pulsar NS200 FI ABS DCGris Onix.png'},
+          {name:'Negro Zafiro', hex:'#0f172a', img:'/media/motos/Pulsar NS200 FI ABS DCNegro Zafiro.png' },
+          {name:'Negro Cristal',hex:'#000000', img:'/media/motos/Pulsar NS200 FI ABS DCNegro Cristal.png'}
+          ]
+        },
+        { id:'Bajaj Pulsar NS200 FI ABS SC', name:'Bajaj Pulsar NS200 FI ABS SC', price:13199000, 
+          colors:[
+          {name:'Mercury Blue', hex: '#0284c7', img: '/media/motos/Pulsar NS200 FI ABS SCMercury Bluet.png'},
+          {name:'Rojo Merlot', hex: '#800020', img: '/media/motos/Pulsar NS200 FI ABS SCRojo Merlot.png' },
+          {name:'Gris Onix', hex:'#334155', img:'/media/motos/Pulsar NS200 FI ABS SCGris Onix.png'},
+          {name:'Negro Zafiro', hex:'#0f172a', img:'/media/motos/Pulsar NS200 FI ABS SCNegro Zafiro.png' }
+          ]
+        },
+        { id:'Bajaj Pulsar NS400Z', name:'Bajaj Pulsar NS400Z', price:18299000, 
+          colors:[
+          {name:'Blanco Metalizado', hex:'#f8fafc', img: '/media/motos/Pulsar NS400ZBlanco metalizado.png'},
+          {name:'Rojo Racing', hex: '#dc2626', img: '/media/motos/Pulsar NS400ZRojo Rancing.png' },
+          {name:'Gris Mercurio', hex:'#94a3b8', img:'/media/motos/Pulsar NS400ZGris Mercurio.png'},
+          {name:'Negro Cristal',hex:'#000000', img:'/media/motos/Pulsar NS400ZNegro Cristal.png'}
+          ]
+        },
+        { id:'Bajaj Pulsar P150', name:'Bajaj Pulsar P150', price:8999000, 
+          colors:[
+          {name:'Azul', hex: '#1d4ed8', img: '/media/motos/Pulsar P150Azul.png'},   
+          {name:'Gris', hex:'#cbd5e1', img:'/media/motos/Pulsar P150Grisclaro.png'},
+          {name:'Gris Mercurio', hex:'#64748b', img:'/media/motos/Pulsar P150grisoscuro.png'},
+          ]
+        },
+        { id:'Bajaj Pulsar RS 200 FI ABS', name:'Bajaj Pulsar RS 200 FI ABS', price:15999000, 
+          colors:[
+          {name:'Blanco Metalizado', hex:'#f8fafc', img: '/media/motos/Pulsar RS 200 FI ABSBlanco metalizado.png'},
+          {name:'Rojo', hex: '#dc2626', img: '/media/motos/Pulsar RS 200 FI ABSRojo.png' },
+          {name:'Negro',hex:'#000000', img:'/media/motos/Pulsar RS 200 FI ABSNegro.png'}
+          ]
+        },
+    ]},
+
+    { grupo:'BAJAJ DISCOVER', brand:'BAJAJ DISCOVER', motos:[
+        { id:'Bajaj Discover 125 SPORT', name:'Bajaj Discover 125 SPORT', price:6999000, 
+          colors:[
+          {name:'Naranja', hex: '#ea580c' , img:'/media/motos/Discover 125 SPORTNaranja.png' },   
+          {name:'Azul Mercurio', hex: '#0284c7', img: '/media/motos/Discover 125 SPORTAzul mercurio.png'},   
+          {name:'Azul', hex: '#1d4ed8', img:'/media/motos/Discover 125 SPORTazul.png'},
+          {name:'Amarillo', hex: '#eab308' , img:'/media/motos/Discover 125 SPORTamarilo.png' }
+          ] 
+        },
+    ]},
+
+    { grupo:'BAJAJ DOMINAR', brand:'BAJAJ DOMINAR', motos:[
+        { id:'Bajaj Dominar 250', name:'Bajaj Dominar 250', price:15799900, 
+          colors:[
+          {name:'Negro Mate', hex:'#1e293b', img:'/media/motos/Dominar 250negromate.png' },
+          {name:'Negro Cristal',hex:'#000000', img:'/media/motos/Dominar 250negro.png'}
+          ] 
+        },
+        { id:'Bajaj Dominar 400 Touring', name:'Bajaj Dominar 400 Touring', price:19399000, 
+          colors:[
+          {name:'Azul', hex: '#1d4ed8', img: '/media/motos/Dominar 400 TouringAzul.png'},
+          {name:'Negro',hex:'#000000', img:'/media/motos/Dominar 400 Touringnegro.png'}
+          ] 
+        },
+        { id:'Bajaj Dominar 400 Volcano', name:'Bajaj Dominar 400 Volcano', price:20399000, 
+          colors:[
+          {name:'Negro',hex:'#000000', img:'/media/motos/Dominar 400 VolcanoNEGRO.png'}
+          ] 
+        },
+    ]},
+
+    { grupo:'AKT', brand:'AKT', motos:[
+        { id:'AKT NKD 125 FP', name:'AKT NKD 125 FP', price:5890000, 
+          colors:[
+          {name:'Negro',hex:'#000000', img:'/media/motos/NKD 125 FPnegro.png'}
+          ] 
+        },
+        { id:'AKT NKD 125', name:'AKT NKD 125', price:4890000, 
+          colors:[
+          {name:'Gris', hex:'#64748b', img:'/media/motos/NKD 125gris.png'},
+          {name:'Negro Mate', hex:'#1e293b', img:'/media/motos/NKD 125negro.png' },
+          {name:'Negro Brillante',hex:'#000000', img:'/media/motos/NKD 125negrobrillante.png'},
+          {name:'Blanco', hex:'#f8fafc', img: '/media/motos/NKD 125blanco.png'},
+          {name:'Gris Base', hex:'#94a3b8', img:'/media/motos/NKD 125grisbase.png'}
+          ] 
+        },
+        { id:'AKT NKD 125 Classic', name:'AKT NKD 125 Classic', price:5490000, 
+          colors:[
+          {name:'Negro',hex:'#000000', img:'/media/motos/NKD 125 Classicnegro.png'}
+          ] 
+        },
+        { id:'AKT CHR 125', name:'AKT CHR 125', price:5490000, 
+          colors:[
+          {name:'Negro', hex:'#000000', img:'/media/motos/CHR 125negro.png'},
+          {name:'Rojo', hex: '#dc2626', img: '/media/motos/CHR 125roja.png' },
+          {name:'Azul', hex: '#1d4ed8', img: '/media/motos/CHR 125azul.png' }
+          ] 
+        },
+        { id:'AKT CR4 150', name:'AKT CR4 150', price:6999000, 
+          colors:[
+          {name:'Gris', hex:'#475569', img:'/media/motos/CR4 150gris.png' },
+          {name:'Negro Brillante',hex:'#000000', img:'/media/motos/CR4 150negro.png'}
+          ] 
+        },
+        { id:'AKT 250 R', name:'AKT 250 R', price:11590000, 
+          colors:[
+          {name:'Gris Base', hex:'#475569', img:'/media/motos/AKT 250 Rgris.png' },
+          {name:'Negro Verde',hex:'#0f172a', img:'/media/motos/AKT 250 Rnegroverde.png'}
+          ] 
+        },
+        { id:'AKT CR4 125', name:'AKT CR4 125', price:6590000, 
+          colors:[
+          {name:'Gris', hex:'#475569', img:'/media/motos/CR4 125gris.png' },
+          {name:'Negro Brillante',hex:'#000000', img:'/media/motos/CR4 125negro.png'}
+          ] 
+        },
+        { id:'AKT CR4 200 Pro', name:'AKT CR4 200 Pro', price:8590000, 
+          colors:[
+          {name:'Negro Mate', hex:'#1e293b', img:'/media/motos/CR4 200 Pronegromate.png' },
+          {name:'Gris', hex:'#64748b', img:'/media/motos/CR4 200 Progris.png' },
+          {name:'Negro Brillante',hex:'#000000', img:'/media/motos/CR4 200 Pronegrobrillante.png'}
+          ] 
+        },
+        { id:'AKT TTR 125', name:'AKT TTR 125', price:7390000, 
+          colors:[
+          {name:'Negro', hex:'#1e293b', img:'/media/motos/TTR 125 NEGRA.png' },
+          {name:'Blanca', hex:'#ffffff', img:'/media/motos/TTR 125 BLANCA.png' }
+          ] 
+        },
+        { id:'AKT TTR 200', name:'AKT TTR 200', price:9190000, 
+          colors:[
+          {name:'Negro', hex:'#1e293b', img:'/media/motos/TTR 200 NEGRA.png' },
+          {name:'Blanca', hex:'#ffffff', img:'/media/motos/TTR 200 BLANCA.png' }
+          ] 
+        },
+        { id:'AKT TTR 125 VERDE MILITAR', name:'AKT TTR 125 VERDE MILITAR', price:7800000, 
+          colors:[
+          {name:'Verde Militar', hex:'#4B5320', img:'/media/motos/ttr 125 verde militar.png' }
+          ] 
+        },
+        { id:'AKT TTR 200 ABS VERDE MILITAR', name:'AKT TTR 200 ABS VERDE MILITAR', price:9390000, 
+          colors:[
+          {name:'Verde Militar', hex:'#4B5320', img:'/media/motos/TTR 200 ABS VERDE.png' }
+          ] 
+        },
+        { id:'AKT TT200 Rally', name:'AKT TT200 Rally', price:10590000, 
+          colors:[
+          {name:'Verde', hex:'#4B5320', img:'/media/motos/TT200 RALLY VERDE MILITAR.png' }
+          ] 
+        },
+        { id:'AKT RALLY 300 ', name:'AKT RALLY 300', price:17590000, 
+          colors:[
+          {name:'Negro', hex:'#000000', img:'/media/motos/rally 300 negro.png' },
+          {name:'Gris Mate', hex:'#64748b', img:'/media/motos/RALLY 300 GRIS MATE.png' },
+          {name:'Gris Brillante',hex:'#E8E9EB', img:'/media/motos/rally 300 gris brillante.png'}
+          ] 
+        },
+        { id:'AKT DS 300', name:'AKT DS 300', price:15590000, 
+          colors:[
+          {name:'Gris', hex:'#64748b', img:'/media/motos/DS 300 GRIS.png' },
+          {name:'Negro',hex:'#000000', img:'/media/motos/DS 300 NEGRO.png'}
+          ] 
+        },
+        { id:'AKT TT200 con ABS', name:'AKT TT200 con ABS', price:9790000, 
+          colors:[
+          {name:'Blanca', hex:'#ffffff', img:'/media/motos/TT200 con ABS blanca.png' },
+          {name:'Negro', hex:'#000000', img:'/media/motos/TT200 con ABS negra mate.png' }
+          ] 
+        },
+        { id:'AKT XRS 180', name:'AKT XRS 180', price:13990000, 
+          colors:[
+          {name:'Negro',hex:'#000000', img:'/media/motos/XRS 180negro.png'},
+          {name:'Gris', hex:'#64748b', img:'/media/motos/XRS 180gris.png' },
+          {name:'Blanco', hex:'#f8fafc', img: '/media/motos/XRS 180Blanco.png'}
+          ] 
+        },
+        { id:'AKT Dynamic RX Fi', name:'AKT Dynamic RX Fi', price:9490000, 
+          colors:[
+          {name:'Gris', hex:'#64748b', img:'/media/motos/Dynamic RX Figris.png'},
+          {name:'Negro Brillante',hex:'#000000', img:'/media/motos/Dynamic RX Finegrobrillante.png'},
+          {name:'Plata', hex:'#cbd5e1', img: '/media/motos/Dynamic RX Fiblanco.png'}
+          ] 
+        },
+        { id:'AKT Dynamic Pro CBS', name:'AKT Dynamic Pro CBS',price:8090000, 
+          colors:[
+          {name:'Gris', hex:'#64748b', img:'/media/motos/Dynamic Pro CBSgris.png'},
+          {name:'Negro Mate', hex:'#1e293b', img:'/media/motos/Dynamic Pro CBSnegromate.png' },
+          {name:'Negro Cristal',hex:'#000000', img:'/media/motos/Dynamic Pro CBSnegro.png'}
+          ] 
+        },
+        { id:'AKT Jet Evo', name:'AKT Jet Evo',price:12590000, 
+          colors:[
+          {name:'Gris', hex:'#64748b', img:'/media/motos/Jet Evogris.png'},
+          {name:'Negro Mate', hex:'#1e293b', img:'/media/motos/Jet Evonegromate.png' }
+          ] 
+        },
+        { id:'AKT Special 110 X', name:'AKT Special 110 X',price:4999000, 
+          colors:[
+          {name:'Gris', hex:'#64748b', img:'/media/motos/Special 110 Xgris.png'},
+          {name:'Azul', hex: '#1d4ed8', img: '/media/motos/Special 110 Xazul.png' },
+          {name:'Negro Verde', hex:'#1e293b', img:'/media/motos/Special 110 Xnegroverde.png' }
+          ] 
+        },
+        { id:'AKT Flex 125', name:'AKT Flex 125',price:5890000, 
+          colors:[
+          {name:'Azul', hex: '#1d4ed8', img: '/media/motos/Flex 125azul.png' },
+          {name:'Negro Azul', hex:'#1e293b', img:'/media/motos/Flex 125negroazul.png' },
+          {name:'Negro Cristal',hex:'#000000', img:'/media/motos/Flex 125negro.png'}
+          ] 
+        },
+    ]},
+
+    { grupo:'AUTECO TVS Y APACHE', brand:'AUTECO TVS Y APACHE', motos:[
+        { id:'AUTECO TVS RAIDER 125', name:'AUTECO TVS RAIDER 125', price:7299000, 
+          colors:[
+          {name:'Negra Nebulosa',hex:'#000000', img:'/media/motos/RAIDER 125NEGRA NEBULOSA.png'},
+          {name:'Verde Slate',hex:'#2d5a27', img:'/media/motos/RAIDER 125VERDE SLATE.png'}
+          ] 
+        },
+        { id:'AUTECO TVS RAIDER 125 RACING', name:'AUTECO TVS RAIDER 125 RACING', price:7549000, 
+          colors:[
+          {name:'Azul Petróleo / Dorado',hex:'#0f4c81', img:'/media/motos/RAIDER 125 RACINGAZUL PETRÓLEO- DORADO.png'},
+          {name:'Gris California / Rojo',hex:'#64748b', img:'/media/motos/RAIDER 125 RACINgGRIS CALIFORNIA ROJO.png'}
+          ] 
+        },
+        { id:'AUTECO TVS RAIDER 125 FI', name:'AUTECO TVS RAIDER 125 FI', price:7549000, 
+          colors:[
+          {name:'Negro Nebulosa / Gris',hex:'#000000', img:'/media/motos/RAIDER 125 FINEGRO NEBULOSA- GRIS.png'},
+          {name:'Gris California / Dorado',hex:'#64748b', img:'/media/motos/RAIDER 125 FIGRIS CALIFORNIA DORADO.png'}
+          ] 
+        },
+        { id:'AUTECO TVS APACHE 160 CARBURADA ABS', name:'AUTECO TVS APACHE 160 CARBURADA ABS', price:9299000, 
+          colors:[
+          {name:'Negro Nebulosa / Verde',hex:'#000000', img:'/media/motos/APACHE 160 CARBURADA ABSNEGRO NEBULOSA - VERDE.png'},
+          {name:'Gris Humo',hex:'#64748b', img:'/media/motos/APACHE 160 CARBURADA ABSGRISHUMO.png'}
+          ] 
+        },
+        { id:'AUTECO TVS APACHE RTR 160 4V XC FI', name:'AUTECO TVS APACHE RTR 160 4V XC FI', price:9999999, 
+          colors:[
+          {name:'Negro Nebulosa / Roja',hex:'#000000', img:'/media/motos/APACHE RTR 160 4V XC FINEGRO NEBULOSA - ROJA.png'},
+          {name:'Gris Grafito / Azul',hex:'#475569', img:'/media/motos/APACHE RTR 160 4V XC FIGRIS GRAFITO - AZUL.png'}
+          ] 
+        },
+        { id:'AUTECO TVS APACHE RTR 160 4V XC FI RACING', name:'AUTECO TVS APACHE RTR 160 4V XC FI RACING', price:10299000, 
+          colors:[
+          {name:'Azul Cuarzo',hex:'#1d4ed8', img:'/media/motos/APACHE RTR 160 4V XC FI RACINGAZUL CUARZO.png'},
+          {name:'Gris Humo',hex:'#64748b', img:'/media/motos/APACHE RTR 160 4V XC FI RACINGGRIS HUMO.png'}
+          ] 
+        },
+        { id:'AUTECO TVS APACHE 160 FI NG', name:'AUTECO TVS APACHE 160 FI NG', price:11499999, 
+          colors:[
+          {name:'Negro Nebulosa / Roja',hex:'#000000', img:'/media/motos/APACHE 160 FI NGNEGRO NEBULOSA - ROJA.png'}
+          ] 
+        },
+        { id:'AUTECO TVS APACHE 160 FI ABS EDICIÓN ESPECIAL', name:'AUTECO TVS APACHE 160 FI ABS EDICIÓN ESPECIAL', price:10649000, 
+          colors:[
+          {name:'Azul Cuarzo',hex:'#1d4ed8', img:'/media/motos/APACHE 160 FI ABS EDICIÓN ESPECIALAZUL CUARZO.png'},
+          {name:'Blanco Celestial / Azul', hex:'#f8fafc', img: '/media/motos/APACHE 160 FI ABS EDICIÓN ESPECIALBLANCO CELESTIAL- AZUL.png'},
+          {name:'Gris Humo',hex:'#64748b', img:'/media/motos/APACHE 160 FI ABS EDICIÓN ESPECIALGRIS HUMO.png'}
+          ] 
+        },
+        { id:'AUTECO TVS APACHE 200 CARBURADA ABS', name:'AUTECO TVS APACHE 200 CARBURADA ABS', price:11799000, 
+          colors:[
+          {name:'Negro Nebulosa / Dorado',hex:'#000000', img:'/media/motos/APACHE 200 CARBURADA ABSNEGRO NEBULOSA - DORADO.png'},
+          {name:'Top Frost / Rojo',hex:'#dc2626', img:'/media/motos/APACHE 200 CARBURADA ABSTOP FROST - ROJO.png'}
+          ] 
+        },
+        { id:'AUTECO TVS APACHE RTR 200 4V XC FI ABS', name:'AUTECO TVS APACHE RTR 200 4V XC FI ABS', price:12599000, 
+          colors:[
+          {name:'Azul Cuarzo',hex:'#1d4ed8', img:'/media/motos/APACHE RTR 200 4V XC FI ABSAZUL CUARZO.png'},
+          {name:'Gris Grafito',hex:'#475569', img:'/media/motos/APACHE RTR 200 4V XC FI ABSGRIS GRAFITO.png'},
+          {name:'Negro Nebulosa / Roja',hex:'#000000', img:'/media/motos/APACHE RTR 200 4V XC FI ABSNEGRO NEBULOSA.png'}
+          ] 
+        },
+        { id:'AUTECO TVS APACHE 200 FI EDICIÓN ESPECIAL', name:'AUTECO TVS APACHE 200 FI EDICIÓN ESPECIAL', price:12899000, 
+          colors:[
+          {name:'Negro Nebulosa / Blanca',hex:'#000000', img:'/media/motos/APACHE 200 FI EDICIÓN ESPECIALNEGRO NEBULOSA - BLANCA.png'}
+          ]
+        }, 
+        { id:'AUTECO TVS RONIN 225 TD', name:'AUTECO TVS RONIN 225 TD', price:13999000, 
+          colors:[
+          {name:'Gris Negro',hex:'#475569', img:'/media/motos/RONIN 225 TDGRIS NEGRO.png'},
+          {name:'Naranja',hex:'#ea580c', img:'/media/motos/RONIN 225 TDNARANJA.png.png'}
+          ]
+        }, 
+        { id:'AUTECO TVS Apache 200 FI NG', name:'AUTECO TVS Apache 200 FI NG', price:14999000, 
+          colors:[
+          {name:'Negro Nebulosa / Roja',hex:'#000000', img:'/media/motos/Apache 200 FI NGNEGRO NEBULOSA -ROJA.png'}
+          ]
+        }, 
+        { id:'AUTECO TVS APACHE RTR 310', name:'AUTECO TVS APACHE RTR 310', price:27799000, 
+          colors:[
+          {name:'Amarillo Furia / Negra',hex:'#eab308', img:'/media/motos/APACHE RTR 310AMARILLO FURIA - NEGRA.png'},
+          {name:'Negro Rojo',hex:'#000000', img:'/media/motos/APACHE RTR 310NEGRO ROJO.png'}
+          ]
+        }, 
+        { id:'AUTECO TVS APACHE RTR 310 PRM', name:'AUTECO TVS APACHE RTR 310 PRM', price:29499000, 
+          colors:[
+          {name:'Blanco Azul Rojo',hex:'#1d4ed8', img:'/media/motos/APACHE RTR 310BLANCO AZUL ROJO.png'},
+          {name:'Negro Rojo',hex:'#000000', img:'/media/motos/APACHE RTR 310 PRMNEGRO ROJO.png'}
+          ]
+        }, 
+    ]},
+
+    { grupo:'YAMAHA', brand:'YAMAHA', motos:[
+        { id:'YAMAHA XTZ150', name:'YAMAHA XTZ150', price:14500000, 
+          colors:[
+          {name:'Negro', hex:'#000000', img:'/media/motos/XTZ150negra.png'},
+          {name:'Azul', hex:'#1d4ed8', img:'/media/motos/XTZ150azul.png'},
+          {name:'Blanco', hex:'#f8fafc', img: '/media/motos/XTZ150blanco.png'},
+          {name:'Café', hex:'#78350f', img: '/media/motos/XTZ150Cafe.png'}
+          ] 
+        },
+        { id:'YAMAHA XTZ250', name:'YAMAHA XTZ250', price:25900000, 
+          colors:[
+          {name:'Negro', hex:'#000000', img:'/media/motos/XT250negra.png'},
+          {name:'Blanco', hex:'#f8fafc', img: '/media/motos/XTZ250blanco.png'},
+          {name:'Rojo', hex:'#dc2626', img: '/media/motos/XTZ250Rojo.png'}
+          ] 
+        },
+        { id:'YAMAHA FZ VERSIÓN 3.0', name:'YAMAHA FZ VERSIÓN 3.0', price:11800000, 
+          colors:[
+          {name:'Negro', hex:'#000000', img:'/media/motos/FZ VERSIÓN 3.0negra.png'},
+          {name:'Azul', hex:'#1d4ed8', img:'/media/motos/FZ VERSIÓN 3.0azul.png'},
+          {name:'Gris', hex:'#64748b', img:'/media/motos/FZ VERSIÓN 3.0gris.png'}
+          ] 
+        },
+        { id:'YAMAHA FZ-S FI VERSION 3.0', name:'YAMAHA FZ-S FI VERSION 3.0', price:12300000, 
+          colors:[
+          {name:'Gris', hex:'#64748b', img:'/media/motos/FZ-S FI VERSION 3.0gris.png'},
+          {name:'Azul', hex:'#1d4ed8', img:'/media/motos/FZ-S FI VERSION 3.0azul.png'},
+          {name:'Negro', hex:'#000000', img:'/media/motos/FZ-S FI VERSION 3.0negro.png'}
+          ] 
+        },
+        { id:'YAMAHA FZ-S FI VERSION 4.0', name:'YAMAHA FZ-S FI VERSION 4.0', price:13500000, 
+          colors:[
+          {name:'Gris', hex:'#64748b', img:'/media/motos/FZ-S FI VERSION 4.0gris.png'},
+          {name:'Rojo', hex:'#dc2626', img:'/media/motos/FZ-S FI VERSION 4.0rojo.png'},
+          {name:'Negro', hex:'#000000', img:'/media/motos/FZ-S FI VERSION 4.0negro.png'}
+          ] 
+        },
+        { id:'YAMAHA FZ 25', name:'YAMAHA FZ 25', price:16500000, 
+          colors:[
+          {name:'Negro', hex:'#000000', img:'/media/motos/FZ 25negro.png'},
+          {name:'Azul', hex:'#1d4ed8', img:'/media/motos/FZ 25azul.png'}
+          ] 
+        },
+        { id:'YAMAHA MT-03', name:'YAMAHA MT-03', price:28900000, 
+          colors:[
+          {name:'Negro', hex:'#000000', img:'/media/motos/MT-03negro.png'},
+          {name:'Cyan', hex:'#06b6d4', img:'/media/motos/MT-03cyan.png'}
+          ] 
+        },
+        { id:'YAMAHA NMAX CONNECTED', name:'YAMAHA NMAX CONNECTED', price:16800000, 
+          colors:[
+          {name:'Gris', hex:'#64748b', img:'/media/motos/NMAX CONNECTEDgris.png'},
+          {name:'Negro', hex:'#000000', img:'/media/motos/NMAX CONNECTEDnegro.png'},
+          {name:'Azul', hex:'#1d4ed8', img:'/media/motos/NMAX CONNECTEDazul.png'}
+          ] 
+        },
+        { id:'YAMAHA NMAX TECH MAX', name:'YAMAHA NMAX TECH MAX', price:18500000, 
+          colors:[
+          {name:'Gris Oscuro', hex:'#334155', img:'/media/motos/NMAX TECH MAXgrisoscuro.png'},
+          {name:'Bronce', hex:'#b45309', img:'/media/motos/NMAX TECH MAXbronce.png'}
+          ] 
+        },
+        { id:'YAMAHA XMAX', name:'YAMAHA XMAX', price:32900000, 
+          colors:[
+          {name:'Gris', hex:'#64748b', img:'/media/motos/XMAXgris.png'},
+          {name:'Negro', hex:'#000000', img:'/media/motos/XMAXnegro.png'}
+          ] 
+        },
+        { id:'YAMAHA DT 125', name:'YAMAHA DT 125', price:12900000, 
+          colors:[
+          {name:'Blanco', hex:'#f8fafc', img:'/media/motos/DT 125blanco.png'},
+          {name:'Azul', hex:'#1d4ed8', img:'/media/motos/DT 125azul.png'}
+          ] 
+        },
+        { id:'YAMAHA DT 175', name:'YAMAHA DT 175', price:14900000, 
+          colors:[
+          {name:'Blanco', hex:'#f8fafc', img:'/media/motos/DT 175blanco.png'},
+          {name:'Rojo', hex:'#dc2626', img:'/media/motos/DT 175rojo.png'}
+          ] 
+        },
+    ]},
+
+    { grupo:'HONDA', brand:'HONDA', motos:[
+        { id:'HONDA CB 125F', name:'HONDA CB 125F', price:6299000, 
+          colors:[
+          {name:'Negro', hex:'#000000', img:'/media/motos/CB 125Fnegro.png'},
+          {name:'Rojo', hex:'#dc2626', img:'/media/motos/CB 125Frojo.png'},
+          {name:'Azul', hex:'#1d4ed8', img:'/media/motos/CB 125Fazul.png'}
+          ] 
+        },
+        { id:'HONDA CB 190R', name:'HONDA CB 190R', price:11999000, 
+          colors:[
+          {name:'Rojo', hex:'#dc2626', img:'/media/motos/CB 190Rrojo.png'},
+          {name:'Negro', hex:'#000000', img:'/media/motos/CB 190Rnegro.png'},
+          {name:'Repsol', hex:'#f97316', img:'/media/motos/CB 190Rrepsol.png'}
+          ] 
+        },
+        { id:'HONDA XR 150L', name:'HONDA XR 150L', price:10500000, 
+          colors:[
+          {name:'Negro', hex:'#000000', img:'/media/motos/XR 150Lnegro.png'},
+          {name:'Rojo', hex:'#dc2626', img:'/media/motos/XR 150Lrojo.png'},
+          {name:'Blanco', hex:'#f8fafc', img:'/media/motos/XR 150Lblanco.png'}
+          ] 
+        },
+        { id:'HONDA XR 190L', name:'HONDA XR 190L', price:13500000, 
+          colors:[
+          {name:'Rojo', hex:'#dc2626', img:'/media/motos/XR 190Lrojo.png'},
+          {name:'Negro', hex:'#000000', img:'/media/motos/XR 190Lnegro.png'}
+          ] 
+        },
+        { id:'HONDA NAVI', name:'HONDA NAVI', price:5599000, 
+          colors:[
+          {name:'Negro', hex:'#000000', img:'/media/motos/NAVInegro.png'},
+          {name:'Blanco', hex:'#f8fafc', img:'/media/motos/NAVIblanco.png'},
+          {name:'Rojo', hex:'#dc2626', img:'/media/motos/NAVIrojo.png'},
+          {name:'Verde', hex:'#15803d', img:'/media/motos/NAVIverde.png'}
+          ] 
+        },
+        { id:'HONDA DIO', name:'HONDA DIO', price:8299000, 
+          colors:[
+          {name:'Gris', hex:'#64748b', img:'/media/motos/DIOgris.png'},
+          {name:'Negro', hex:'#000000', img:'/media/motos/DIOnegro.png'},
+          {name:'Rojo', hex:'#dc2626', img:'/media/motos/DIOrojo.png'}
+          ] 
+        },
+    ]},
+
+    { grupo:'SUZUKI', brand:'SUZUKI', motos:[
+        { id:'SUZUKI GSX-R150 ABS', name:'SUZUKI GSX-R150 ABS', price:14590000, 
+          colors:[
+          {name:'Azul', hex: '#1d4ed8', img: '/media/motos/GSX-R150 ABSazul.png'},
+          {name:'Negro', hex:'#000000', img:'/media/motos/GSX-R150 ABSnegro.png'}
+          ]
+        }
+    ]}
+];
+
+const motosData = catalogo.flatMap(g => g.motos.map(m => ({...m, brand:g.brand})));
+const colorSeleccionadoPorMoto = {};
+let valorMotoGlobal = 0;
+let nombreMotoGlobal = "";
+
+function fmtCOP(n){ return "$" + Math.round(n).toLocaleString('es-CO') + " COP"; }
+
+function agrandarFoto(src){
+    document.getElementById('lightboxImg').src = src;
+    document.getElementById('lightbox').style.display = 'flex';
+}
+
+function cerrarLightbox(){
+    document.getElementById('lightbox').style.display = 'none';
+}
+
+function cambiarColorTarjeta(motoId, colorObj, el){
+    colorSeleccionadoPorMoto[motoId] = colorObj.name;
+    const imgEl = document.getElementById(`img-${motoId}`);
+    if(imgEl){
+        imgEl.style.opacity = '0.2';
+        setTimeout(() => {
+            imgEl.src = colorObj.img;
+            imgEl.parentElement.setAttribute('onclick', `agrandarFoto('${colorObj.img}')`);
+            imgEl.style.opacity = '1';
+        }, 150);
+    }
+    const parent = el.closest('.colores-disponibles');
+    if(parent){
+        parent.querySelectorAll('.dot-color').forEach(dot => dot.classList.remove('active'));
+        el.classList.add('active');
+    }
+}
+
+function renderGrid(motosAMostrar = motosData){
+    const container = document.getElementById('mainContainer');
+    if(!container) return;
+    container.innerHTML = "";
+
+    catalogo.forEach(grupo => {
+        const motosDelGrupo = grupo.motos.filter(m => motosAMostrar.some(x => x.id === m.id));
+        if(motosDelGrupo.length === 0) return;
+
+        const seccion = document.createElement('div');
+        seccion.className = 'grupo-marca';
+        seccion.setAttribute('data-marca', grupo.brand);
+
+        const titulo = document.createElement('div');
+        titulo.className = 'grupo-titulo';
+        titulo.innerText = "Motos " + grupo.grupo;
+        seccion.appendChild(titulo);
+
+        const grid = document.createElement('div');
+        grid.className = 'grid-motos';
+
+        motosDelGrupo.forEach(moto => {
+            if(!colorSeleccionadoPorMoto[moto.id]){
+                colorSeleccionadoPorMoto[moto.id] = moto.colors[0].name;
+            }
+            const colorInicial = moto.colors.find(c => c.name === colorSeleccionadoPorMoto[moto.id]) || moto.colors[0];
+
+            let dotsHtml = "";
+            moto.colors.forEach(color => {
+                const isActive = color.name === colorInicial.name ? 'active' : '';
+                dotsHtml += `
+                    <div class="dot-color-wrap">
+                        <div class="dot-color ${isActive}" 
+                             style="background:${color.hex};" 
+                             title="${color.name}"
+                             onclick='cambiarColorTarjeta("${moto.id}", ${JSON.stringify(color)}, this)'>
+                        </div>
+                    </div>`;
+            });
+
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.innerHTML = `
+                <div class="marca-tag">${grupo.grupo}</div>
+                <h3>${moto.name}</h3>
+                <div class="img-container" onclick="agrandarFoto('${colorInicial.img}')">
+                    <img id="img-${moto.id}" class="moto-img" src="${colorInicial.img}" alt="${moto.name}">
+                    <span class="zoom-badge">🔍 Toca para ampliar</span>
+                </div>
+                <div class="precio">${fmtCOP(moto.price)}</div>
+                <div class="colores-disponibles">
+                    <span class="label">Colores Disponibles:</span>
+                    ${dotsHtml}
+                </div>
+                <button class="btn-cotizar" onclick="abrirModal('${moto.id}')">Solicitar crédito</button>
+            `;
+            grid.appendChild(card);
+        });
+
+        seccion.appendChild(grid);
+        container.appendChild(seccion);
+    });
+}
+
+function buscarMoto(){
+    const query = document.getElementById('searchInput').value.toLowerCase().trim();
+    if(query === ""){
+        renderGrid(motosData);
+        return;
+    }
+    const filtradas = motosData.filter(m => m.name.toLowerCase().includes(query) || m.brand.toLowerCase().includes(query));
+    renderGrid(filtradas);
+}
+
+function filtrarMarca(marca, btn){
+    document.getElementById('searchInput').value = "";
+    document.querySelectorAll('.marca-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    if(marca === 'todas'){
+        renderGrid(motosData);
+    } else {
+        const filtradas = motosData.filter(m => m.brand === marca);
+        renderGrid(filtradas);
+    }
+}
+
+function abrirModal(motoId){
+    const moto = motosData.find(m => m.id === motoId);
+    if(!moto) return;
+    nombreMotoGlobal = moto.name;
+    valorMotoGlobal = moto.price;
+
+    document.getElementById('modalTitulo').innerText = "Cotizar " + moto.name;
+    document.getElementById('modalPrecioTexto').innerText = "Precio de contado: " + fmtCOP(moto.price);
+
+    const selectColor = document.getElementById('colorMoto');
+    selectColor.innerHTML = "";
+    
+    const colorPreseleccionado = colorSeleccionadoPorMoto[motoId] || moto.colors[0].name;
+
+    moto.colors.forEach(color => {
+        const option = document.createElement('option');
+        option.value = color.name;
+        option.innerText = color.name;
+        if(color.name === colorPreseleccionado) option.selected = true;
+        selectColor.appendChild(option);
+    });
+
+    document.getElementById('montoCuota').value = 500000;
+    document.getElementById('modalCotizacion').style.display = 'flex';
+    calcularCredito();
+}
+
+function cerrarModal(){
+    document.getElementById('modalCotizacion').style.display = 'none';
+    document.getElementById('formCotizacion').reset();
+}
+
+function calcularCredito(){
+    let cuotaInicialInput = document.getElementById('montoCuota');
+    let valorIngresado = parseFloat(cuotaInicialInput.value);
+
+    if(isNaN(valorIngresado)){
+        valorIngresado = 0;
+    }
+
+    let cuotaParaCalculo = valorIngresado;
+    if(cuotaParaCalculo < 500000) {
+        cuotaParaCalculo = 500000;
+    }
+
+    if(cuotaParaCalculo > valorMotoGlobal) {
+        cuotaParaCalculo = valorMotoGlobal;
+    }
+
+    const montoFinanciar = valorMotoGlobal - cuotaParaCalculo;
+    const meses = parseInt(document.getElementById('plazoMeses').value);
+    let cuotaMensual = 0;
+    
+    if(montoFinanciar > 0){
+        cuotaMensual = (montoFinanciar * TASA_INTERES) / (1 - Math.pow(1 + TASA_INTERES, -meses));
+    }
+
+    document.getElementById('resValorMoto').innerText = fmtCOP(valorMotoGlobal);
+    document.getElementById('resCuotaInicial').innerText = "- " + fmtCOP(cuotaParaCalculo);
+    document.getElementById('resMontoFinanciar').innerText = fmtCOP(montoFinanciar);
+    document.getElementById('resCuotaMensual').innerText = fmtCOP(cuotaMensual);
+}
+
+function enviarWhatsApp(e){
+    e.preventDefault();
+
+    const nombre = document.getElementById('nombre').value.trim();
+    const cedula = document.getElementById('cedula').value.trim();
+    const colorEscogido = document.getElementById('colorMoto').value;
+    
+    let cuotaInicialInput = document.getElementById('montoCuota');
+    let cuotaInicial = parseFloat(cuotaInicialInput.value);
+    
+    if(isNaN(cuotaInicial) || cuotaInicial < 500000) {
+        cuotaInicial = 500000;
+        cuotaInicialInput.value = 500000;
+    }
+
+    const meses = document.getElementById('plazoMeses').value;
+    const cuotaMensual = document.getElementById('resCuotaMensual').innerText;
+
+    const textoMensaje = `Hola Crediservi, quiero solicitar mi crédito:%0A%0A` +
+                         `🏍️ *Moto:* ${nombreMotoGlobal}%0A` +
+                         `💰 *Valor Moto:* ${fmtCOP(valorMotoGlobal)}%0A` +
+                         `🎨 *Color elegido:* ${colorEscogido}%0A` +
+                         `👤 *Nombre:* ${nombre}%0A` +
+                         `🪪 *Cédula:* ${cedula}%0A` +
+                         `💵 *Cuota Inicial Abonada:* $${Math.round(cuotaInicial).toLocaleString('es-CO')} COP%0A` +
+                         `📅 *Plazo:* ${meses} meses%0A` +
+                         `🏷️ *Cuota estimada:* ${cuotaMensual}/mes`;
+
+    const urlWhatsApp = `https://wa.me/${NUMERO_TELEFONO}?text=${textoMensaje}`;
+
+    window.open(urlWhatsApp, '_blank');
+    cerrarModal();
+}
+
+window.onload = function(){
+    renderGrid(motosData);
+};
+
+window.onclick = function(e){
+    if(e.target === document.getElementById('modalCotizacion')) cerrarModal();
+};
+</script>
+{% endblock %}

@@ -1,0 +1,95 @@
+{% extends 'motapp/base.html' %}
+{% load static %}
+
+{% block title %}Respaldo Legal y Ayuda — Crediservi{% endblock %}
+
+{% block content %}
+<div style="max-width: 1100px; margin: 40px auto; padding: 0 20px;">
+
+    <!-- ENCABEZADO DE LA SECCIÓN -->
+    <div style="text-align: center; margin-bottom: 40px;">
+        <h1 style="color: #ffffff; font-size: 2.2rem; font-weight: 800; margin-bottom: 10px;">
+            Respaldo Legal & Centro de Ayuda
+        </h1>
+        <p style="color: var(--text-muted, #8f9bba); font-size: 1rem; max-width: 700px; margin: 0 auto;">
+            Conoce las normativas colombianas que respaldan tu financiación de vehículos y resuelve tus dudas antes de solicitar tu crédito en <strong>Crediservi S.A.S.</strong>
+        </p>
+    </div>
+
+    <!-- BLOQUE 1: RESPALDO JURÍDICO Y LEYES -->
+    <div style="background: var(--surface, #141824); border: 1px solid var(--border, #232838); border-radius: 16px; padding: 30px; margin-bottom: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+        <h2 style="color: var(--primary, #00ff88); font-size: 1.4rem; font-weight: 800; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+            🛡️ Marco Jurídico y Garantía Legal en Colombia
+        </h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+            <div style="background: rgba(7, 9, 14, 0.6); border: 1px solid var(--border, #232838); padding: 18px; border-radius: 12px;">
+                <h3 style="color: #fff; font-size: 1rem; font-weight: 700; margin-bottom: 8px;">⚖️ Validez del Contrato Privado</h3>
+                <p style="color: #b0b9d0; font-size: 0.85rem; line-height: 1.5; margin: 0;">
+                    Operamos amparados bajo el <strong>Código Civil (Art. 1861)</strong> y el <strong>Código de Comercio (Art. 861)</strong> para la constitución formal de compromisos financieros de compraventa.
+                </p>
+            </div>
+            <div style="background: rgba(7, 9, 14, 0.6); border: 1px solid var(--border, #232838); padding: 18px; border-radius: 12px;">
+                <h3 style="color: #fff; font-size: 1rem; font-weight: 700; margin-bottom: 8px;">📝 Firma Digital Certificada</h3>
+                <p style="color: #b0b9d0; font-size: 0.85rem; line-height: 1.5; margin: 0;">
+                    Tu firma en pantalla y los documentos generados en PDF cuentan con plena validez probatoria según la <strong>Ley 527 de 1999</strong> sobre Comercio Electrónico.
+                </p>
+            </div>
+            <div style="background: rgba(7, 9, 14, 0.6); border: 1px solid var(--border, #232838); padding: 18px; border-radius: 12px;">
+                <h3 style="color: #fff; font-size: 1rem; font-weight: 700; margin-bottom: 8px;">🔒 Garantías Mobiliarias & Protección</h3>
+                <p style="color: #b0b9d0; font-size: 0.85rem; line-height: 1.5; margin: 0;">
+                    Cumplimos con la <strong>Ley 1676 de 2013</strong> (Garantías Mobiliarias) y el Estatuto del Consumidor (<strong>Ley 1480 de 2011</strong>) para garantizar una transacción justa e informada.
+                </p>
+            </div>
+            <div style="background: rgba(7, 9, 14, 0.6); border: 1px solid var(--border, #232838); padding: 18px; border-radius: 12px;">
+                <h3 style="color: #fff; font-size: 1rem; font-weight: 700; margin-bottom: 8px;">🔑 Habeas Data (Ley 1581 de 2012)</h3>
+                <p style="color: #b0b9d0; font-size: 0.85rem; line-height: 1.5; margin: 0;">
+                    Tus datos personales están protegidos con cifrado y reserva estricta. Nunca serán compartidos ni vendidos a terceros sin autorización formal.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- BLOQUE 2: PREGUNTAS FRECUENTES (FAQ) -->
+    <div style="background: var(--surface, #141824); border: 1px solid var(--border, #232838); border-radius: 16px; padding: 30px; margin-bottom: 30px;">
+        <h2 style="color: var(--primary, #00ff88); font-size: 1.4rem; font-weight: 800; margin-bottom: 20px;">
+            ❓ Preguntas Frecuentes
+        </h2>
+        <div style="display: flex; flex-direction: column; gap: 15px;">
+            <details style="background: rgba(7, 9, 14, 0.6); border: 1px solid var(--border, #232838); border-radius: 10px; padding: 15px; cursor: pointer;">
+                <summary style="color: #fff; font-weight: 700; font-size: 0.95rem;">¿De cuánto es la cuota inicial mínima?</summary>
+                <p style="color: #b0b9d0; font-size: 0.88rem; margin-top: 10px; line-height: 1.5;">
+                    La cuota inicial mínima establecida es de <strong>$500.000 COP</strong>. Si decides aportar un valor superior, el saldo a financiar disminuye y el valor de tus mensualidades baja considerablemente.
+                </p>
+            </details>
+            <details style="background: rgba(7, 9, 14, 0.6); border: 1px solid var(--border, #232838); border-radius: 10px; padding: 15px; cursor: pointer;">
+                <summary style="color: #fff; font-weight: 700; font-size: 0.95rem;">¿Dónde y cómo me entregan la motocicleta?</summary>
+                <p style="color: #b0b9d0; font-size: 0.88rem; margin-top: 10px; line-height: 1.5;">
+                    Contamos con convenios y bodegas aliadas autorizadas a nivel nacional (marcas como Bajaj, AKT, TVS, Yamaha, Honda y Suzuki). Una vez validado tu contrato en PDF, coordinamos la entrega en el punto autorizado más cercano a tu municipio.
+                </p>
+            </details>
+            <details style="background: rgba(7, 9, 14, 0.6); border: 1px solid var(--border, #232838); border-radius: 10px; padding: 15px; cursor: pointer;">
+                <summary style="color: #fff; font-weight: 700; font-size: 0.95rem;">¿Cómo firmo y envío mi contrato?</summary>
+                <p style="color: #b0b9d0; font-size: 0.88rem; margin-top: 10px; line-height: 1.5;">
+                    Ingresa a la sección <strong>CONTRATO</strong> del menú superior, valida tus datos, dibuja tu firma con el dedo (celular) o el mouse (PC) y genera tu documento oficial PDF.
+                </p>
+            </details>
+        </div>
+    </div>
+
+    <!-- BLOQUE 3: ATENCIÓN AL CLIENTE Y WHATSAPP -->
+    <div style="background: var(--surface, #141824); border: 1px solid var(--primary, #00ff88); border-radius: 16px; padding: 30px; text-align: center;">
+        <h2 style="color: #ffffff; font-size: 1.5rem; font-weight: 800; margin-bottom: 10px;">
+            💬 Atención y Soporte Directo
+        </h2>
+        <p style="color: var(--text-muted, #8f9bba); font-size: 0.95rem; margin-bottom: 25px;">
+            ¿Tienes dudas adicionales sobre tu crédito o prefieres asesoría guiada con un ejecutivo?
+        </p>
+        <a href="https://wa.me/573228359044?text=Hola%20Crediservi,%20tengo%20dudas%20sobre%20mi%20solicitud%20de%20crédito" 
+           target="_blank" 
+           style="background: #25d366; color: #ffffff; font-weight: 800; padding: 14px 28px; border-radius: 10px; font-size: 1rem; text-decoration: none; display: inline-flex; align-items: center; gap: 10px; box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4); transition: transform 0.2s;">
+            <span>💬</span> HABLAR DIRECTAMENTE POR WHATSAPP
+        </a>
+    </div>
+
+</div>
+{% endblock %}
