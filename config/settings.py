@@ -26,11 +26,13 @@ SECRET_KEY = 'django-insecure-s6r6j_qz_b0wj!@rv(l*b2&g%uxsgjo*s%7fbjf1dr2c+w3lqr
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    '.onrender.com', 
-    'motoscrediservi.onrender.com', 
-    'coopalianza.shop', 
-    'www.coopalianza.shop', 
-    'localhost', 
+    '.onrender.com',
+    'motoscrediservi.onrender.com',
+    'crediservi.online',       # <-- Agregado
+    'www.crediservi.online',   # <-- Agregado
+    'coopalianza.shop',
+    'www.coopalianza.shop',
+    'localhost',
     '127.0.0.1'
 ]
 
@@ -46,6 +48,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'motapp',
     'django.contrib.humanize',
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://crediservi.online',
+    'https://www.crediservi.online',
+    'https://coopalianza.shop',
+    'https://www.coopalianza.shop',
 ]
 
 MIDDLEWARE = [
