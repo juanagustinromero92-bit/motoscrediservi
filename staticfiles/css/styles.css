@@ -606,3 +606,150 @@ footer {
 }
 
 footer strong { color: #fff; }
+
+/* --- ESTILOS DEFINITIVOS PARA EL AGENTE VIRTUAL DE CREDISERVI --- */
+#chatbot-launcher {
+    position: fixed !important;
+    bottom: 25px !important;
+    right: 95px !important;
+    z-index: 999999 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    cursor: pointer !important;
+    background: transparent !important;
+    border: none !important;
+}
+
+.chatbot-badge {
+    background: #141824 !important;
+    border: 1px solid #00ff88 !important;
+    padding: 10px 16px !important;
+    border-radius: 20px !important;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.6) !important;
+    font-size: 0.9rem !important;
+    color: #fff !important;
+    font-weight: bold !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    white-space: nowrap !important;
+}
+
+.chatbot-pulse-dot {
+    width: 10px !important;
+    height: 10px !important;
+    background: #25d366 !important;
+    border-radius: 50% !important;
+    display: inline-block !important;
+    animation: pulseChatbot 1.5s infinite !important;
+}
+
+.chatbot-avatar-btn {
+    background: #00ff88 !important;
+    color: #000 !important;
+    width: 55px !important;
+    height: 55px !important;
+    min-width: 55px !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 1.6rem !important;
+    box-shadow: 0 0 20px rgba(0, 255, 136, 0.5) !important;
+}
+
+/* VENTANA FLOTANTE DEL CHAT */
+#chatbot-window {
+    position: fixed !important;
+    bottom: 95px !important;
+    right: 25px !important;
+    width: 360px !important;
+    max-width: 90vw !important;
+    height: 500px !important;
+    max-height: 75vh !important;
+    background: #141824 !important;
+    border: 1px solid #232838 !important;
+    border-radius: 14px !important;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.9) !important;
+    z-index: 9999999 !important;
+    display: none;
+    flex-direction: column !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+}
+
+.chatbot-header {
+    background: #07090e !important;
+    padding: 14px 16px !important;
+    border-bottom: 1px solid #232838 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+}
+
+.chatbot-body {
+    flex: 1 !important;
+    padding: 15px !important;
+    overflow-y: auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+    background: #07090e !important;
+    box-sizing: border-box !important;
+}
+
+.msg-bot {
+    background: #141824 !important;
+    color: #ffffff !important;
+    border: 1px solid #232838 !important;
+    border-left: 4px solid #00ff88 !important;
+    padding: 12px 14px !important;
+    border-radius: 10px !important;
+    font-size: 0.88rem !important;
+    line-height: 1.5 !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    word-wrap: break-word !important;
+}
+
+.msg-user {
+    background: #00ff88 !important;
+    color: #000 !important;
+    font-weight: bold !important;
+    padding: 10px 14px !important;
+    border-radius: 10px !important;
+    font-size: 0.88rem !important;
+    line-height: 1.4 !important;
+    max-width: 85% !important;
+    align-self: flex-end !important;
+    word-wrap: break-word !important;
+}
+
+.chat-btn-option {
+    background: #07090e !important;
+    border: 1px solid #00ff88 !important;
+    color: #00ff88 !important;
+    padding: 10px 14px !important;
+    border-radius: 8px !important;
+    font-size: 0.82rem !important;
+    font-weight: bold !important;
+    cursor: pointer !important;
+    text-align: left !important;
+    transition: 0.2s !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    display: block !important;
+    margin-top: 4px !important;
+}
+
+.chat-btn-option:hover {
+    background: #00ff88 !important;
+    color: #000 !important;
+}
+
+@keyframes pulseChatbot {
+    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); }
+    70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(37, 211, 102, 0); }
+    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+}
