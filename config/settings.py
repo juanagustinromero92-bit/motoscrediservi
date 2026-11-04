@@ -80,16 +80,17 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/6.1/ref/settings/#databases
+import dj_database_url
+import os
+
+# Si existe DATABASE_URL (en Render), la usa. Si no (en tu PC), usa PostgreSQL local o SQLite.
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'motos_db',                  # El nombre de la base de datos que creaste
-        'USER': 'postgres',                  # Tu usuario de PostgreSQL (por defecto suele ser 'postgres')
-        'PASSWORD': '1234',    # La contraseña que configuraste en tu PostgreSQL
-        'HOST': 'localhost',
-        'PORT': '5432',
-    }
+    'default': dj_database_url.config(
+        default=os.environ.get('DATABASE_URL') or 'postgres://postgres:1234@localhost:5432/motos_db',
+        conn_max_age=600
+    )
 }
+
 
 
 # Password validation
