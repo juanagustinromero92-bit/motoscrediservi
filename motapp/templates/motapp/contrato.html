@@ -246,7 +246,7 @@
         let financiado = precio - cuotaEfectiva;
         if(financiado < 0) financiado = 0;
 
-        let interesMensual = 0.022;
+        let interesMensual = 0.005;
         let cuotaMensual = (meses > 0 && financiado > 0) ? (financiado * (1 + (interesMensual * meses))) / meses : 0;
 
         document.getElementById('lblFinanciado').innerText = "$" + Math.round(financiado).toLocaleString('es-CO') + " COP";
