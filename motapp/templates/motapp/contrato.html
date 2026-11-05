@@ -59,9 +59,11 @@
             &nbsp;|&nbsp; 📅 <strong>Plazo:</strong> 
             <select id="selectPlazo" onchange="calcularFinanciacion()" style="padding: 2px; border: 1px solid #94a3b8;">
                 <option value="12">12 Meses</option>
-                <option value="18">18 Meses</option>
                 <option value="24" selected>24 Meses</option>
+            
                 <option value="36">36 Meses</option>
+                <option value="48">48 Meses</option>
+                <option value="60">60 Meses</option>
             </select>
             &nbsp;|&nbsp; 📊 <strong>Cuota Aprox:</strong> <span id="lblCuotaMensual" style="color: #b91c1c; font-weight: 900;">$0</span>
         </li>
@@ -238,20 +240,31 @@
     }
 
     function calcularFinanciacion() {
-        let precio = parseFloat(document.getElementById('inputPrecio').value) || 0;
-        let cuota = parseFloat(document.getElementById('inputCuota').value) || 0;
-        let meses = parseInt(document.getElementById('selectPlazo').value) || 24;
+    // Asegurar que lea el campo correcto (cambia 'inputPrecio' por 'inputValor' si así se llama en tu HTML)
+    let precio = parseFloat(document.getElementById('inputPrecio')?.value || document.getElementById('inputValor')?.value) || 0;
+    let cuota = parseFloat(document.getElementById('inputCuota').value) || 0;
+    let meses = parseInt(document.getElementById('selectPlazo').value) || 24;
 
-        let cuotaEfectiva = cuota < 500000 && cuota !== 0 ? 500000 : cuota;
-        let financiado = precio - cuotaEfectiva;
-        if(financiado < 0) financiado = 0;
+    let cuotaEfectiva = cuota < 500000 && cuota !== 0 ? 500000 : cuota;
+    let financiado = precio - cuotaEfectiva;
+    if (financiado < 0) financiado = 0;
 
-        let interesMensual = 0.005;
-        let cuotaMensual = (meses > 0 && financiado > 0) ? (financiado * (1 + (interesMensual * meses))) / meses : 0;
+    let interesMensual = 0.005; // 0.5% mensual
+    
+    // Si prefieres cuota fija con interés compuesto (Amortización Francesa):
+    // let cuotaMensual = (financiado > 0 && meses > 0) ? 
+    //     (financiado * interesMensual * Math.pow(1 + interesMensual, meses)) / (Math.pow(1 + interesMensual, meses) - 1) : 0;
 
-        document.getElementById('lblFinanciado').innerText = "$" + Math.round(financiado).toLocaleString('es-CO') + " COP";
-        document.getElementById('lblCuotaMensual').innerText = "$" + Math.round(cuotaMensual).toLocaleString('es-CO') + " (" + meses + " m)";
-    }
+    // Si prefieres la fórmula de interés simple que estabas usando:
+    let cuotaMensual = (meses > 0 && financiado > 0) ? (financiado * (1 + (interesMensual * meses))) / meses : 0;
+
+    // Actualizar etiquetas en el HTML de forma segura
+    let lblFinanciado = document.getElementById('lblFinanciado');
+    let lblCuotaMensual = document.getElementById('lblCuotaMensual');
+
+    if (lblFinanciado) lblFinanciado.innerText = "$" + Math.round(financiado).toLocaleString('es-CO') + " COP";
+    if (lblCuotaMensual) lblCuotaMensual.innerText = "$" + Math.round(cuotaMensual).toLocaleString('es-CO') + " (" + meses + " m)";
+}
 
     const canvas = document.getElementById('canvasFirma');
     const ctx = canvas.getContext('2d');
